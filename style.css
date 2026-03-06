@@ -1,0 +1,1013 @@
+/* =========================================================
+   RESET & CUSTOM PROPERTIES
+========================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #FFF4EA;
+  --bg-alt:      #EDDCC6;
+  --text:        #2b2521;
+  --text-muted:  #6e6358;
+  --accent:      #BF4646;      /* primary emphasis / CTA */
+  --accent-rgb:  191, 70, 70;
+  --accent-cool: #7EACB5;      /* navigation / state */
+  --accent-cool-rgb: 126, 172, 181;
+  --border:      #d8c8b5;
+  --max-w:       960px;
+  --pad-x:       24px;
+
+  /* ── Header row (title + description + chart) bleed ─────
+     How far the task-header expands past the column edge.   */
+  --task-bleed:  0px;
+
+  /* ── Video row bleed ─────────────────────────────────────
+     How far the 3-video grid expands past the column edge,
+     independently of the header row above it.              */
+  --video-bleed: 300px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Roboto', sans-serif;
+  font-size: 17px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip; /* allow bleed sections to extend past column without horizontal scrollbar */
+}
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+.container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+}
+
+/* Every <section> is the main content column */
+section {
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 72px var(--pad-x);
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+h1, h2, h3, h4 {
+  font-family: 'Roboto Slab', serif;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: clamp(1.85rem, 3.5vw, 2.4rem);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+p { margin-bottom: 1rem; }
+p:last-child { margin-bottom: 0; }
+
+.section-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-cool);
+  margin-bottom: 0.5rem;
+}
+
+.body-text {
+  color: var(--text-muted);
+  font-size: 1.125rem;
+  max-width: 760px;
+  line-height: 1.78;
+}
+
+/* =========================================================
+   STICKY TOC NAV
+========================================================= */
+#toc-nav {
+  position: fixed;
+  left: 18px;
+  top: 50%;
+  width: 190px;
+  z-index: 100;
+  background: transparent;
+  transform: translateX(-130%) translateY(-50%);
+  transition: transform 0.24s ease;
+}
+
+#toc-nav::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, rgba(var(--accent-cool-rgb), 0.45), rgba(var(--accent-cool-rgb), 0.16));
+}
+
+#toc-nav.visible { transform: translateX(0) translateY(-50%); }
+
+.toc-inner {
+  padding: 6px 0 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toc-title {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.8;
+  padding: 2px 10px 5px;
+  margin-bottom: 2px;
+}
+
+.toc-link {
+  display: block;
+  padding: 7px 10px 7px 11px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 450;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  border-radius: 5px;
+  white-space: normal;
+  line-height: 1.35;
+  transition: color 0.14s, border-color 0.14s, background 0.14s, transform 0.14s, opacity 0.14s;
+}
+
+.toc-link:hover {
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.02);
+  transform: translateX(1px);
+  opacity: 1;
+}
+
+.toc-link.active {
+  color: var(--text);
+  border-left-color: var(--accent-cool);
+  background: rgba(var(--accent-cool-rgb), 0.14);
+  font-weight: 500;
+}
+
+@media (max-width: 1180px) {
+  #toc-nav {
+    left: 10px;
+    width: 170px;
+  }
+}
+
+/* =========================================================
+   HERO — TITLE CARD
+========================================================= */
+#hero-title {
+  background: #f6ede2;
+  text-align: center;
+  padding: var(--pad-x);
+  height: 100vh;
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+#hero-title .paper-title {
+  font-family: 'Roboto Mono', monospace;
+  font-size: min(7vw, 6rem);
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  margin: 0 auto 2.5rem;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.hero-venue {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.4rem;
+  opacity: 0.78;
+}
+
+.hero-tagline {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  max-width: 580px;
+  margin: -1.5rem auto 2.5rem;
+  line-height: 1.7;
+}
+
+.hero-em {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+#hero-title .authors {
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+}
+
+#hero-title .institution {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  margin-bottom: 2.25rem;
+}
+
+.link-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 22px;
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  background: transparent;
+  transition: background 0.16s, border-color 0.16s, color 0.16s;
+}
+
+.btn-link:hover {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+
+.btn-link--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+.btn-link--primary:hover {
+  background: #a13a3a;
+  border-color: #a13a3a;
+  color: var(--bg);
+}
+
+.btn-link svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+/* Animated scroll indicator at the bottom of the hero */
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  opacity: 0.55;
+  animation: hint-bounce 2.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero-scroll-hint svg {
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes hint-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0);   opacity: 0.55; }
+  50%       { transform: translateX(-50%) translateY(6px); opacity: 0.85; }
+}
+
+/* =========================================================
+   INTRO — VIDEO + ABSTRACT (stacked)
+========================================================= */
+#intro-split {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 48px var(--pad-x);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 36px;
+}
+
+#hero-video {
+  padding: 0;
+  background: transparent;
+}
+
+#hero-video iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  margin: 0;
+  display: block;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* Override placeholder styles for the dark hero strip */
+#hero-video .placeholder-media {
+  width: 100%;
+  min-height: min(56.25vw, 620px);
+  margin: 0;
+  background: #111;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+#hero-video .placeholder-media::before {
+  width: 56px;
+  height: 56px;
+  background-color: rgba(255, 255, 255, 0.08);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E");
+  background-size: 28px;
+}
+
+#abstract {
+  background: transparent;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+}
+
+#abstract .section-label {
+  margin-bottom: 0.75rem;
+}
+
+#abstract p {
+  max-width: none;
+  margin: 0;
+  text-align: left;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.72;
+}
+
+#abstract p + p {
+  margin-top: 0.55rem;
+}
+
+/* =========================================================
+   FIGURES & MEDIA
+========================================================= */
+figure { margin: 0; }
+
+figcaption {
+  font-size: 0.845rem;
+  font-style: italic;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 0.7rem;
+  line-height: 1.55;
+}
+
+.figcaption-justify {
+  text-align: justify;
+  text-align-last: left;
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Inline math color helpers used in figure captions */
+.math-gray { color: var(--text-muted); font-style: normal; }
+.math-blue { color: var(--accent-cool); font-style: normal; }
+
+/* Centered full-width figures (architecture, gating diagram, robomimic chart) */
+.fig-centered {
+  max-width: 600px;
+  margin: 0 auto 1rem;
+}
+
+.fig-centered img,
+.fig-centered .placeholder-media {
+  width: 100%;
+}
+
+.media-frame-video {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  background: #000;
+}
+
+.media-frame {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto 1rem;
+  overflow: hidden;
+}
+
+#gating-training .fig-centered {
+  overflow: visible;
+}
+
+#gating-training .media-zoom--gating {
+  display: block;
+  width: 60%;
+  margin: 0 auto;
+  transform: none;
+}
+
+#attention {
+  padding-bottom: 48px;
+}
+
+/* =========================================================
+   PLACEHOLDER MEDIA
+   Replace any .placeholder-media with <video> or <img> when
+   real assets are available.
+========================================================= */
+.placeholder-media {
+  background: #fcfbf8;
+  border: 1.5px solid #e5dfd6;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Play icon shown inside every video placeholder */
+.placeholder-media::before {
+  content: '';
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.07);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bbb'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+  flex-shrink: 0;
+}
+
+/* Chart/image placeholder — grid icon instead of play */
+.placeholder-media.square::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23bbb' stroke-width='1.5'%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3Cpath d='M3 9h18M9 21V9'/%3E%3C/svg%3E");
+  background-size: 22px;
+}
+
+.placeholder-media.square { aspect-ratio: 1 / 1; }
+
+/* =========================================================
+   VIDEO GRIDS
+   .three-col → standard 3-policy comparison row
+   .four-col  → casting rows (3 videos + bar chart)
+========================================================= */
+.video-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.video-grid.three-col { grid-template-columns: 1fr 1fr 1fr; }
+.video-grid.four-col  { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+.video-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* allow grid items to shrink below min-content width */
+  overflow: hidden;
+}
+
+/* Column label above each video ("Ours", "Long-History DP", etc.) */
+.col-header {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+.col-header.ours {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* =========================================================
+   TASK HEADER — title + description alongside success-rate chart.
+   Videos sit below at full width.
+========================================================= */
+.task-header {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.task-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-chart {
+  flex-shrink: 0;
+  width: 240px;
+}
+
+.task-chart .col-header {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.task-chart img {
+  width: 100%;
+  display: block;
+}
+
+.task-chart figcaption {
+  font-size: 0.76rem;
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* Video rows: negative margins on both sides push the block wider than its parent */
+.task-videos-full {
+  margin-left:  calc(var(--video-bleed) / -2);
+  margin-right: calc(var(--video-bleed) / -2);
+}
+
+/* Tab bar and overlay snap back to column width by reversing the margin bleed */
+.task-videos-full .tab-bar,
+.task-videos-full .overlay-details {
+  margin-left:  calc(var(--video-bleed) / 2);
+  margin-right: calc(var(--video-bleed) / 2);
+}
+
+@media (max-width: 640px) {
+  .task-header { flex-direction: column; }
+  .task-chart  { width: 100%; }
+  .task-videos-full { margin-left: 0; margin-right: 0; }
+  .task-videos-full .tab-bar,
+  .task-videos-full .overlay-details { margin-left: 0; margin-right: 0; }
+}
+
+/* =========================================================
+   RESULT ROWS
+   Each row is tagged data-config="friction_0.015" etc.
+   Future conversion to a dropdown selector:
+     1. Add <select> above the row group
+     2. On change, hide all .result-row, show [data-config=value]
+   Column headers travel with each row, so no re-layout needed.
+========================================================= */
+.result-row {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.result-row:last-of-type { margin-bottom: 0; }
+
+.row-config-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.row-caption {
+  font-size: 0.845rem;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.55;
+}
+
+.row-caption.before { margin-bottom: 10px; }
+.row-caption.after  { margin-top: 10px; }
+
+/* =========================================================
+   SUBSECTIONS (Pushing / Casting / Flinging / Cup / etc.)
+========================================================= */
+.subsection {
+  width: 100%;
+  padding-top: 32px;
+}
+
+.subsection + .subsection {
+  position: relative;
+  margin-top: 16px;
+  padding-top: 40px;
+}
+
+/* Separator: gradient line fading at both ends, spanning bleed width */
+.subsection + .subsection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: calc(var(--video-bleed) / -2);
+  right: calc(var(--video-bleed) / -2);
+  height: 3.5px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--border) 6%,
+    var(--border) 94%,
+    transparent
+  );
+  opacity: 0.85;
+}
+
+.subsection h3 {
+  font-family: 'Roboto Slab', serif;
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.subsection-intro {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-bottom: 0.75rem;
+  max-width: 680px;
+  line-height: 1.65;
+  padding: 0.55rem 0.85rem;
+  border-left: 3px solid var(--border);
+  background: var(--bg-alt);
+  border-radius: 0 6px 6px 0;
+}
+
+/* =========================================================
+   TAB BAR — config selector used in all experiment subsections
+   Design: clean underline style, no filled backgrounds.
+   Active indicator: secondary accent (--tab-active).
+   Tabs scroll horizontally on overflow (handles 7-level pushing row).
+========================================================= */
+:root {
+  --tab-active: var(--accent-cool);
+}
+
+.tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.75rem;
+  overflow-x: auto;
+  /* hide scrollbar but keep function */
+  scrollbar-width: none;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  flex-shrink: 0;
+  padding: 9px 18px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px; /* sit on top of the tab-bar border */
+  background: none;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.825rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  opacity: 0.55;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.14s, border-color 0.14s, opacity 0.14s;
+}
+
+.tab-btn:hover {
+  color: var(--text);
+  opacity: 0.85;
+}
+
+.tab-btn.active {
+  color: var(--tab-active);
+  border-bottom-color: var(--tab-active);
+  font-weight: 500;
+  opacity: 1;
+}
+
+.tab-panel         { display: none; }
+.tab-panel.active  { display: block; width: 100%; max-width: 100%; }
+
+/* =========================================================
+   INITIAL POSITION ACCORDION — Cup task (§ 5A)
+   Pure <details>/<summary> — no JS needed.
+========================================================= */
+.overlay-details {
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.overlay-details summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  -webkit-appearance: none;
+  appearance: none;
+  list-style: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  padding: 0;
+  border: none;
+  background: none;
+  transition: color 0.15s;
+}
+
+.overlay-details summary::-webkit-details-marker { display: none; }
+.overlay-details summary::marker { display: none; }
+
+.overlay-details summary:hover { color: var(--text); }
+
+.overlay-details summary::after {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236e6358' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.overlay-details[open] summary::after { transform: rotate(180deg); }
+
+.overlay-single {
+  margin-top: 0.85rem;
+  max-width: 280px;
+}
+
+/* =========================================================
+   IN-THE-WILD BLOCK — Cup task (§ 5A)
+========================================================= */
+.in-the-wild-block {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.in-the-wild-block h4 {
+  font-family: 'Roboto Slab', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.in-the-wild-block figure {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   ATTENTION VISUALIZATION — § 3 and § 5B
+========================================================= */
+.vis-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-variant: small-caps;
+  color: var(--accent-cool);
+  margin-bottom: 0.5rem;
+}
+
+.attention-block {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.attention-block figure {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   TEAM SECTION
+========================================================= */
+.team-grid {
+  display: flex;
+  gap: 16px 32px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.author-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 130px;
+  text-align: center;
+}
+
+.author-photo {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--bg-alt);
+  border: 1.5px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+
+.author-photo:hover { border-color: var(--accent-cool); }
+
+/* When a real headshot is added, swap the svg for <img> */
+.author-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.author-photo svg {
+  width: 44px;
+  height: 44px;
+  color: var(--border);
+}
+
+.author-name {
+  font-family: 'Roboto Slab', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  margin: 0;
+}
+
+.corresponding {
+  font-size: 0.75em;
+  color: var(--accent-cool);
+  vertical-align: super;
+  line-height: 0;
+  cursor: help;
+}
+
+.author-affil {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+#footer {
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border);
+  padding: 48px var(--pad-x);
+}
+
+#footer .container {
+  max-width: var(--max-w);
+}
+
+.footer-section-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-cool);
+  margin-bottom: 0.5rem;
+}
+
+.citation-block {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.bibtex-wrapper {
+  position: relative;
+  margin-bottom: 2.5rem;
+}
+
+.bibtex-wrapper pre {
+  background: #1a1a1a;
+  color: #c8c3b8;
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  line-height: 1.65;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 13px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 5px;
+  color: #c8c3b8;
+  font-size: 0.75rem;
+  font-family: 'Roboto', sans-serif;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.copy-btn:hover  { background: rgba(255, 255, 255, 0.15); }
+.copy-btn.copied { background: rgba(80, 180, 100, 0.25); border-color: rgba(80, 180, 100, 0.4); }
+
+.footer-ack {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.footer-copyright {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* =========================================================
+   RESPONSIVE — stack grids to single column on mobile
+========================================================= */
+@media (max-width: 640px) {
+  .video-grid.three-col,
+  .video-grid.four-col { grid-template-columns: 1fr; }
+
+  .link-buttons { flex-direction: column; align-items: center; }
+
+  section { padding: 40px var(--pad-x); }
+
+  #hero-title { padding: var(--pad-x); }
+  #intro-split {
+    min-height: 100svh;
+    gap: 24px;
+    padding: 36px var(--pad-x);
+  }
+  #hero-video iframe,
+  #hero-video .placeholder-media { border-radius: 8px; }
+
+  .team-grid { gap: 28px 24px; }
+  .author-card { width: 100px; }
+  .author-photo { width: 68px; height: 68px; }
+
+  #toc-nav { display: none; }
+}

@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[Paper Title]</title>
+
+  <!-- Google Fonts — only external network dependency -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Roboto+Mono:wght@400;700&family=Roboto+Slab:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- =========================================================
+     STICKY TOC NAV
+     Update href targets and labels to match your sections.
+========================================================= -->
+<nav id="toc-nav" aria-label="Page sections">
+  <div class="toc-inner">
+    <p class="toc-title">On This Page</p>
+    <a class="toc-link" href="#abstract">Abstract</a>
+    <a class="toc-link" href="#architecture">Architecture</a>
+    <a class="toc-link" href="#cross-trial">Cross-Trial Tasks</a>
+    <a class="toc-link" href="#in-trial">In-Trial Tasks</a>
+    <a class="toc-link" href="#gating-training">Gating Training</a>
+    <a class="toc-link" href="#attention">Attention Visualization</a>
+    <a class="toc-link" href="#robomimic">Benchmark</a>
+    <a class="toc-link" href="#team">Team</a>
+  </div>
+</nav>
+
+
+<!-- =========================================================
+     HERO — TITLE CARD
+     Edit: paper-title · authors · institution · href links
+========================================================= -->
+<div id="hero-title">
+  <!-- <p class="hero-venue">RSS 2026</p> -->
+  <h1 class="paper-title">Gated Memory Policy</h1>
+  <p class="hero-tagline">Robot policies that blindly extend observation histories overfit and regress. GMP learns <span class="hero-em">when</span> and <span class="hero-em">what</span> to recall, achieving 30.1% higher success rates on non-Markovian manipulation while staying competitive on Markovian tasks.</p>
+
+  <div class="link-buttons">
+
+    <!-- Paper -->
+    <a href="#" class="btn-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      Paper
+    </a>
+
+    <!-- arXiv -->
+    <a href="#" class="btn-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        <line x1="9" y1="9" x2="15" y2="9"/>
+        <line x1="9" y1="13" x2="13" y2="13"/>
+      </svg>
+      arXiv
+    </a>
+
+    <!-- GitHub — filled/inverted as primary CTA -->
+    <a href="#" class="btn-link btn-link--primary">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482
+                 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462
+                 -1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529
+                 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943
+                 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025
+                 A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025
+                 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842
+                 -2.339 4.687-4.566 4.933.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.741
+                 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+      </svg>
+      Code
+    </a>
+
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </div>
+</div><!-- /#hero-title -->
+
+
+<section id="intro-split">
+  <!-- =========================================================
+       HERO — TEASER VIDEO
+       Replace VIDEO_ID with your YouTube video id.
+  ========================================================= -->
+  <div id="hero-video">
+    <iframe
+      src="https://www.youtube.com/embed/hUj7krAj2Wk?rel=0&controls=1&fs=1&modestbranding=1&playsinline=1&vq=hd1080"
+      title="Teaser Video"
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+
+  <!-- =========================================================
+       ABSTRACT
+       Edit: replace placeholder text with paper abstract.
+  ========================================================= -->
+  <div id="abstract">
+    <p>Robotic manipulation tasks exhibit varying memory requirements, ranging from Markovian tasks
+       that require no memory to non-Markovian tasks that depend on historical information spanning
+       single or multiple interaction trials. Surprisingly, simply extending observation histories of
+       a visuomotor policy often leads to a significant performance drop due to distribution shift
+       and overfitting.</p>
+    <p>To address these issues, we propose <strong>Gated Memory Policy (GMP)</strong>, a visuomotor
+       policy that learns both <em><u>when</u></em> to recall memory and <em><u>what</u></em> to recall. To learn
+       when to recall memory, GMP employs a learned memory gate mechanism that selectively activates
+       history context only when necessary, improving robustness and reactivity. To learn what to
+       recall efficiently, GMP introduces a lightweight cross-attention module that constructs
+       effective latent memory representations. To further enhance robustness, GMP injects diffusion
+       noise into historical actions, mitigating sensitivity to noisy or inaccurate histories during
+       both training and inference.</p>
+    <p>On our proposed non-Markovian benchmark <strong>MemMimic</strong>, GMP achieves a
+       <strong>30.1% average success rate improvement</strong> over long-history baselines, while
+       maintaining competitive performance on Markovian tasks in RoboMimic. All code and data will
+       be publicly available.</p>
+  </div>
+</section>
+
+
+<!-- =========================================================
+     § 2 — MODEL ARCHITECTURE
+     Drop file: assets/images/architecture.png
+     Swap div → <img src="assets/images/architecture.png" alt="…">
+========================================================= -->
+<section id="architecture">
+  <h2>Model Architecture</h2>
+
+  <figure class="fig-centered">
+    <img src="assets/images/architecture.svg" alt="Model architecture diagram">
+    <figcaption class="figcaption-justify">The gated attention module features three key designs: (1) Binary memory gate μ<sub>t</sub> that determines whether history cross-attention is skipped or applied. (2) Noised history action condition to improve robustness and reduce overfitting. (3) Cached history tokens during inference time to reduce computational cost.</figcaption>
+  </figure>
+
+  <!-- <p class="body-text">[Description: Explain key components, data flow, and what makes this architecture
+    novel. Cover the main modules, how information flows between them, and the design choices that
+    differentiate this approach from prior work.]</p> -->
+</section>
+
+
+<!-- =========================================================
+     § 4 — CROSS-TRIAL MEMORY
+     Sub-sections: 4A Pushing · 4B Casting · 4C Flinging
+     All use underline tab bars. One panel visible at a time.
+     Video path pattern:
+       assets/videos/cross_trial/[task]/[config]/[policy].mp4
+         policies: ours.mp4 · long_hist_dp.mp4 · no_hist_dp.mp4
+========================================================= -->
+<section id="cross-trial">
+  <h2>Cross-Trial Memory Tasks</h2>
+  <p class="body-text" style="margin-bottom: 2rem;">In cross-trial tasks, a physical parameter (such as surface friction or object mass) is randomly sampled per episode and hidden from the policy. The robot is given multiple trials and must leverage outcomes from earlier attempts to adapt. GMP's memory gate selectively activates history context only when it is informative, enabling robust cross-trial adaptation without overfitting to irrelevant past observations.</p>
+
+
+  <!-- ── 4A: PUSHING ──────────────────────────────────────
+       7 friction levels. Tab labels use compact µ notation.
+       Drop files into: assets/videos/cross_trial/pushing/friction_[VALUE]/
+  ─────────────────────────────────────────────────────── -->
+  <div class="subsection" id="cross-trial-pushing">
+    <div class="task-header">
+      <div class="task-header-text">
+        <h3>Iterative Pushing (Sim)</h3>
+        <p class="subsection-intro">In each episode, the friction coefficient of the cube is randomly sampled from 0.005 to 0.015
+          and is unknown during testing. The policy is given 6 trials to push the object to the target region (red box). An episode is considered successful if the cube stops within the target region in all of the last 3 trials.</p>
+      </div>
+      <figure class="task-chart">
+        <div class="col-header">Success Rate</div>
+        <img src="assets/charts/cross_trial/pushing/success_rate.svg" alt="Success rate bar chart — Pushing">
+      </figure>
+    </div><!-- /.task-header -->
+
+    <div class="task-videos-full">
+    <div class="tab-bar" role="tablist" data-tabgroup="pushing">
+      <button class="tab-btn active" data-tab="friction_0.015" role="tab">&mu; = 0.015</button>
+      <button class="tab-btn"        data-tab="friction_0.03"  role="tab">&mu; = 0.03</button>
+      <button class="tab-btn"        data-tab="friction_0.06"  role="tab">&mu; = 0.06</button>
+      <button class="tab-btn"        data-tab="friction_0.09"  role="tab">&mu; = 0.09</button>
+      <button class="tab-btn"        data-tab="friction_0.12"  role="tab">&mu; = 0.12</button>
+      <button class="tab-btn"        data-tab="friction_0.16"  role="tab">&mu; = 0.16</button>
+      <button class="tab-btn"        data-tab="friction_0.2"   role="tab">&mu; = 0.2</button>
+    </div>
+
+    <div class="tab-panel active" data-tabgroup="pushing" data-config="friction_0.015">
+      <!-- <p class="row-caption before">[Caption: Low-friction surface (&mu; = 0.015). Expect significant sliding artifacts with memory-free baselines.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.015/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.015/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.015/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Gated Memory policy successfully adapts to low friction while both baselines fail.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="pushing" data-config="friction_0.03">
+      <!-- <p class="row-caption before">[Caption: &mu; = 0.03.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.03/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.03/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.03/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for &mu; = 0.03.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="pushing" data-config="friction_0.06">
+      <!-- <p class="row-caption before">[Caption: &mu; = 0.06.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.06/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.06/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.06/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for &mu; = 0.06.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="pushing" data-config="friction_0.09">
+      <!-- <p class="row-caption before">[Caption: &mu; = 0.09 — mid-range friction baseline.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.09/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.09/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.09/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for &mu; = 0.09.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="pushing" data-config="friction_0.12">
+      <!-- <p class="row-caption before">[Caption: &mu; = 0.12.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.12/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.12/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.12/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for &mu; = 0.12.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="pushing" data-config="friction_0.16">
+      <!-- <p class="row-caption before">[Caption: &mu; = 0.16.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.16/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.16/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.16/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for &mu; = 0.16.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="pushing" data-config="friction_0.2">
+      <!-- <p class="row-caption before">[Caption: &mu; = 0.2 — high-friction surface. All methods expected to perform well.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.2/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.2/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/pushing/friction_0.2/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[All methods adapt well under standard friction conditions.]</p> -->
+    </div>
+    </div><!-- /.task-videos-full -->
+  </div><!-- /#cross-trial-pushing -->
+
+
+  <!-- ── 4B: CASTING ──────────────────────────────────────
+       2 friction regimes. 3-column video grid + persistent success-rate
+       chart floating right (invariant to friction tab switch).
+       Drop files into: assets/videos/cross_trial/casting/[high|low_friction]/
+       Drop chart into:  assets/charts/cross_trial/casting/success_rate_bar_chart.png
+  ─────────────────────────────────────────────────────── -->
+  <div class="subsection" id="cross-trial-casting">
+    <div class="task-header">
+      <div class="task-header-text">
+        <h3>Iterative Casting (Real)</h3>
+        <p class="subsection-intro">The robot needs to cast the object with an unknown friction coefficient so that the object stops sliding between two green lines.
+          The robot stops at the same position in each trial and adaptively adjusts its casting speed. In each episode, the robot is allowed 3 casting attempts. The
+          episode is considered successful if the last 2 trials are successful.</p>
+      </div>
+      <figure class="task-chart">
+        <div class="col-header">Success Rate</div>
+        <img src="assets/charts/cross_trial/casting/success_rate.svg" alt="Success rate bar chart — Casting">
+      </figure>
+    </div><!-- /.task-header -->
+
+    <div class="task-videos-full">
+        <div class="tab-bar" role="tablist" data-tabgroup="casting">
+          <button class="tab-btn active" data-tab="high_friction" role="tab">High Friction</button>
+          <button class="tab-btn"        data-tab="low_friction"  role="tab">Low Friction</button>
+        </div>
+
+        <div class="tab-panel active" data-tabgroup="casting" data-config="high_friction">
+          <!-- <p class="row-caption before">[Caption: High-friction regime. Object lands predictably; cross-trial adaptation mainly fine-tunes release timing.]</p> -->
+          <div class="video-grid three-col">
+            <div class="video-col">
+              <div class="col-header ours">Ours (Gated Memory)</div>
+              <figure><div class="placeholder-media">assets/videos/cross_trial/casting/high_friction/ours.mp4</div></figure>
+            </div>
+            <div class="video-col">
+              <div class="col-header">Long-History DP</div>
+              <figure><div class="placeholder-media">assets/videos/cross_trial/casting/high_friction/long_hist_dp.mp4</div></figure>
+            </div>
+            <div class="video-col">
+              <div class="col-header">No-History DP</div>
+              <figure><div class="placeholder-media">assets/videos/cross_trial/casting/high_friction/no_hist_dp.mp4</div></figure>
+            </div>
+          </div>
+          <!-- <p class="row-caption after">[Gated Memory achieves highest success rate under high-friction conditions.]</p> -->
+        </div>
+
+        <div class="tab-panel" data-tabgroup="casting" data-config="low_friction">
+          <!-- <p class="row-caption before">[Caption: Low-friction regime. Object slides after landing, requiring the policy to compensate via cross-trial recall.]</p> -->
+          <div class="video-grid three-col">
+            <div class="video-col">
+              <div class="col-header ours">Ours (Gated Memory)</div>
+              <figure><div class="placeholder-media">assets/videos/cross_trial/casting/low_friction/ours.mp4</div></figure>
+            </div>
+            <div class="video-col">
+              <div class="col-header">Long-History DP</div>
+              <figure><div class="placeholder-media">assets/videos/cross_trial/casting/low_friction/long_hist_dp.mp4</div></figure>
+            </div>
+            <div class="video-col">
+              <div class="col-header">No-History DP</div>
+              <figure><div class="placeholder-media">assets/videos/cross_trial/casting/low_friction/no_hist_dp.mp4</div></figure>
+            </div>
+          </div>
+          <!-- <p class="row-caption after">[Cross-trial adaptation is critical under low friction; Gated Memory is the only policy to adapt reliably.]</p> -->
+        </div>
+    </div><!-- /.task-videos-full -->
+  </div><!-- /#cross-trial-casting -->
+
+
+  <!-- ── 4C: FLINGING ─────────────────────────────────────
+       4 cloth mass levels.
+       Drop files into: assets/videos/cross_trial/flinging/[mass_level]/
+  ─────────────────────────────────────────────────────── -->
+  <div class="subsection" id="cross-trial-flinging">
+    <div class="task-header">
+      <div class="task-header-text">
+        <h3>Iterative Flinging (Sim)</h3>
+        <p class="subsection-intro">The robot must fling the cloth so that its far edge lands in the target (black) area.
+          In each episode, the cloth's mass is randomly sampled between 0.1 kg and 2.0 kg, and the robot is allowed five flings. Flinging too slowly prevents the cloth from fully extending, while flinging too fast causes it to fold back on itself—both resulting in failure. An episode is considered successful if the last 3 trials are all successful.</p>
+      </div>
+      <figure class="task-chart">
+        <div class="col-header">Success Rate</div>
+        <img src="assets/charts/cross_trial/flinging/success_rate.svg" alt="Success rate bar chart — Flinging">
+      </figure>
+    </div><!-- /.task-header -->
+
+    <div class="task-videos-full">
+    <div class="tab-bar" role="tablist" data-tabgroup="flinging">
+      <button class="tab-btn active" data-tab="mass_low"      role="tab">Low</button>
+      <button class="tab-btn"        data-tab="mass_mid_low"  role="tab">Mid-Low</button>
+      <button class="tab-btn"        data-tab="mass_mid_high" role="tab">Mid-High</button>
+      <button class="tab-btn"        data-tab="mass_high"     role="tab">High</button>
+    </div>
+
+    <div class="tab-panel active" data-tabgroup="flinging" data-config="mass_low">
+      <!-- <p class="row-caption before">[Caption: Low cloth mass — lightweight fabric that requires gentle but precise release.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_low/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_low/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_low/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for low cloth mass.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="flinging" data-config="mass_mid_low">
+      <!-- <p class="row-caption before">[Caption: Mid-low cloth mass.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_mid_low/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_mid_low/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_mid_low/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for mid-low cloth mass.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="flinging" data-config="mass_mid_high">
+      <!-- <p class="row-caption before">[Caption: Mid-high cloth mass.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_mid_high/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_mid_high/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_mid_high/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for mid-high cloth mass.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="flinging" data-config="mass_high">
+      <!-- <p class="row-caption before">[Caption: High cloth mass — heavy fabric with pronounced ballistic arc requiring strong cross-trial correction.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_high/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_high/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/cross_trial/flinging/mass_high/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[High-mass cloth reveals the largest performance gap — only Gated Memory compensates effectively.]</p> -->
+    </div>
+    </div><!-- /.task-videos-full -->
+  </div><!-- /#cross-trial-flinging -->
+
+</section><!-- /#cross-trial -->
+
+
+<!-- =========================================================
+     § 5 — IN-TRIAL MEMORY
+     Sub-sections: 5A Cup · 5B Match Color · 5C Place Back
+     Video path pattern:
+       assets/videos/in_trial/[task]/[location]/[policy].mp4
+         policies: ours.mp4 · long_hist_dp.mp4 · no_hist_dp.mp4
+========================================================= -->
+<section id="in-trial">
+  <h2>In-Trial Memory Tasks</h2>
+  <p class="body-text" style="margin-bottom: 2rem;">In-trial tasks require the robot to recall a cue observed earlier within a single episode (such as an object's starting position or a bin's color). The relevant context appears only once; the policy must encode and retain it to succeed at a later decision point. GMP's lightweight cross-attention module constructs effective latent memory on demand, gating out irrelevant history to stay focused.</p>
+
+
+  <!-- ── 5A: CUP ───────────────────────────────────────────
+       3 locations. Initial position accordion below each panel.
+       Drop video files: assets/videos/in_trial/cup/[loc_X]/
+       Drop overlay images: assets/images/cup_overlay/[loc_X]/initial_pos.png
+       In-the-wild: assets/videos/in_trial/cup/in_the_wild_ours.mp4
+  ─────────────────────────────────────────────────────── -->
+  <div class="subsection" id="in-trial-cup">
+    <div class="task-header">
+      <div class="task-header-text">
+        <h3>Continuous Place Back (Real)</h3>
+        <p class="subsection-intro">A cup and a saucer are randomly placed on the table. The robot must first place the cup on the saucer and then return it to within 5 cm of its original position. This task tests the policy's <strong>spatial memory</strong> and <strong>robustness to real-world noise</strong>.</p>
+      </div>
+      <figure class="task-chart">
+        <div class="col-header">Success Rate</div>
+        <img src="assets/charts/in_trial/cup/success_rate.svg" alt="Success rate bar chart — Cup">
+      </figure>
+    </div><!-- /.task-header -->
+
+    <div class="task-videos-full">
+    <div class="tab-bar" role="tablist" data-tabgroup="cup">
+      <button class="tab-btn active" data-tab="loc_A" role="tab">Location A</button>
+      <button class="tab-btn"        data-tab="loc_B" role="tab">Location B</button>
+      <button class="tab-btn"        data-tab="loc_C" role="tab">Location C</button>
+    </div>
+
+    <div class="tab-panel active" data-tabgroup="cup" data-config="loc_A">
+      <!-- <p class="row-caption before">[Caption: Object placed at Location A.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/cup/loc_A/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/cup/loc_A/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/cup/loc_A/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for Location A.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="cup" data-config="loc_B">
+      <!-- <p class="row-caption before">[Caption: Object placed at Location B.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/cup/loc_B/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/cup/loc_B/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/cup/loc_B/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for Location B.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="cup" data-config="loc_C">
+      <!-- <p class="row-caption before">[Caption: Object placed at Location C.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/cup/loc_C/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/cup/loc_C/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/cup/loc_C/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for Location C.]</p> -->
+    </div>
+
+    <details class="overlay-details">
+      <summary>Show Initial Cup Position Distribution</summary>
+      <figure style="margin-top: 0.85rem; width: 100%;">
+        <img src="assets/images/pos_overlay.png" alt="Initial cup position distribution across all locations" style="width: 100%; display: block;">
+        <figcaption>Initial cup position distribution across all locations</figcaption>
+      </figure>
+    </details>
+    </div><!-- /.task-videos-full -->
+
+    <!-- In-the-wild (Ours only) — always visible below the tabs -->
+    <div class="in-the-wild-block">
+      <h4>In-the-Wild Generalization (Ours Only)</h4>
+      <figure>
+        <div class="placeholder-media">assets/videos/in_trial/cup/in_the_wild_ours.mp4</div>
+        <figcaption>[Caption: Ours policy tested in an uncontrolled real-world setting, demonstrating generalization beyond lab conditions.]</figcaption>
+      </figure>
+    </div>
+  </div><!-- /#in-trial-cup -->
+
+
+  <!-- ── 5B: MATCH COLOR ──────────────────────────────────
+       Block 1: attention visualization — always visible.
+         Drop: assets/videos/in_trial/match_color/attention_vis.mp4
+       Block 2: 4-location tab selector.
+         Drop: assets/videos/in_trial/match_color/[loc_X]/[policy].mp4
+  ─────────────────────────────────────────────────────── -->
+  <div class="subsection" id="in-trial-match-color">
+    <div class="task-header">
+      <div class="task-header-text">
+        <h3>Match Color (Sim)</h3>
+        <p class="subsection-intro">The robot picks up a cube from one of 4 bins with randomly assigned colors. Once the cube is picked up, the bin colors are shuffled, and the robot needs to put the cube back in the bin with the original color. This task tests the policy's <strong>visual memory</strong>.</p>
+      </div>
+      <figure class="task-chart">
+        <div class="col-header">Success Rate</div>
+        <img src="assets/charts/in_trial/match_color/success_rate.svg" alt="Success rate bar chart — Match Color">
+      </figure>
+    </div><!-- /.task-header -->
+
+    <!-- Location tabs -->
+    <div class="task-videos-full">
+    <div class="tab-bar" role="tablist" data-tabgroup="match-color">
+      <button class="tab-btn active" data-tab="loc_A" role="tab">Location A</button>
+      <button class="tab-btn"        data-tab="loc_B" role="tab">Location B</button>
+      <button class="tab-btn"        data-tab="loc_C" role="tab">Location C</button>
+      <button class="tab-btn"        data-tab="loc_D" role="tab">Location D</button>
+    </div>
+
+    <div class="tab-panel active" data-tabgroup="match-color" data-config="loc_A">
+      <!-- <p class="row-caption before">[Caption: Location A — target is positioned on the left side of the workspace.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_A/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_A/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_A/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Gated Memory correctly recalls the color cue and matches it at Location A.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="match-color" data-config="loc_B">
+      <!-- <p class="row-caption before">[Caption: Location B.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_B/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_B/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_B/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for Location B.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="match-color" data-config="loc_C">
+      <!-- <p class="row-caption before">[Caption: Location C.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_C/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_C/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_C/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for Location C.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="match-color" data-config="loc_D">
+      <!-- <p class="row-caption before">[Caption: Location D.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_D/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_D/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/match_color/loc_D/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for Location D.]</p> -->
+    </div>
+    </div><!-- /.task-videos-full -->
+  </div><!-- /#in-trial-match-color -->
+
+
+  <!-- ── 5C: PLACE BACK ───────────────────────────────────
+       4 locations.
+       Drop files: assets/videos/in_trial/place_back/[loc_X]/[policy].mp4
+  ─────────────────────────────────────────────────────── -->
+  <div class="subsection" id="in-trial-place-back">
+    <div class="task-header">
+      <div class="task-header-text">
+        <h3>Discrete Place Back (Sim)</h3>
+        <p class="subsection-intro">A cube is randomly placed in one of four bins, and the robot picks it up, holds it in the air for 2 seconds before returning it to the original bin. This task tests the policy's <strong>spatial memory</strong>.</p>
+      </div>
+      <figure class="task-chart">
+        <div class="col-header">Success Rate</div>
+        <img src="assets/charts/in_trial/place_back/success_rate.svg" alt="Success rate bar chart — Place Back">
+      </figure>
+    </div><!-- /.task-header -->
+
+    <div class="task-videos-full">
+    <div class="tab-bar" role="tablist" data-tabgroup="place-back">
+      <button class="tab-btn active" data-tab="loc_A" role="tab">Location A</button>
+      <button class="tab-btn"        data-tab="loc_B" role="tab">Location B</button>
+      <button class="tab-btn"        data-tab="loc_C" role="tab">Location C</button>
+      <button class="tab-btn"        data-tab="loc_D" role="tab">Location D</button>
+    </div>
+
+    <div class="tab-panel active" data-tabgroup="place-back" data-config="loc_A">
+      <!-- <p class="row-caption before">[Caption: Object originates at Location A.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_A/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_A/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_A/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for Place Back — Location A.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="place-back" data-config="loc_B">
+      <!-- <p class="row-caption before">[Caption: Object originates at Location B.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_B/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_B/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_B/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for Place Back — Location B.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="place-back" data-config="loc_C">
+      <!-- <p class="row-caption before">[Caption: Object originates at Location C.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_C/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_C/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_C/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Observations for Place Back — Location C.]</p> -->
+    </div>
+
+    <div class="tab-panel" data-tabgroup="place-back" data-config="loc_D">
+      <!-- <p class="row-caption before">[Caption: Object originates at Location D.]</p> -->
+      <div class="video-grid three-col">
+        <div class="video-col">
+          <div class="col-header ours">Ours (Gated Memory)</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_D/ours.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">Long-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_D/long_hist_dp.mp4</div></figure>
+        </div>
+        <div class="video-col">
+          <div class="col-header">No-History DP</div>
+          <figure><div class="placeholder-media">assets/videos/in_trial/place_back/loc_D/no_hist_dp.mp4</div></figure>
+        </div>
+      </div>
+      <!-- <p class="row-caption after">[Gated Memory consistently returns the object to its origin; No-History DP fails to localise the target.]</p> -->
+    </div>
+    </div><!-- /.task-videos-full -->
+  </div><!-- /#in-trial-place-back -->
+
+</section><!-- /#in-trial -->
+
+
+<!-- =========================================================
+     § 6 — HOW TO TRAIN THE GATING MECHANISM
+     Drop file: assets/images/gating_training.png
+     Swap div → <img src="assets/images/gating_training.png" alt="…">
+========================================================= -->
+<section id="gating-training">
+  <h2>How to Train the Gating Mechanism</h2>
+
+  <figure class="fig-centered">
+    <img class="media-zoom--gating" src="assets/images/gating_training.svg" alt="Gating training pipeline">
+    <figcaption class="figcaption-justify">
+      We split the dataset into 𝒟<sub>train</sub> and 𝒟<sub>val</sub>.
+      <strong>1)</strong> Train two policies on 𝒟<sub>train</sub> with memory gate always off
+      <span class="math-gray">π</span> or always on <span class="math-blue">π<sub>mem</sub></span>.
+      <strong>2)</strong> Evaluate the two policies on 𝒟<sub>val</sub> for <em>N</em> rounds and
+      calculate the error of the predicted actions at each timestep <em>t</em>.
+      <strong>3)</strong> At timestep <em>t</em>, if the error of the no-memory policy
+      <span class="math-gray">δ<sub>t</sub></span> is significantly larger than the error of the
+      memory policy <span class="math-blue">δ<sup>mem</sup><sub>t</sub></span>, we label
+      <em>memory-required</em> (μ<sub>t</sub>=1) for this timestep; otherwise, μ<sub>t</sub>=0.
+      This stage is referred to as <strong>Calibration</strong> of the memory gate.
+      <strong>4)</strong> We freeze the memory gate weights and retrain the policy on the full
+      dataset to obtain the final Gated Memory Policy π<sub>gated</sub>.
+    </figcaption>
+  </figure>
+
+  <!-- <p class="body-text">[Description: Describe the gating training procedure — how labels are generated,
+    what loss function is used, and why this approach is effective.]</p> -->
+</section>
+
+
+<!-- =========================================================
+     INTERPRETABILITY — ATTENTION VISUALIZATIONS
+     Combined: cube-pushing (cross-trial) + match-color (in-trial)
+========================================================= -->
+<section id="attention">
+  <h2>What Is the Policy Attending To?</h2>
+
+  <p class="body-text" style="margin-bottom: 2rem;">We visualize causal cross-attention weights to understand which past timesteps the policy attends to when computing the next action. The gated memory mechanism actively selects the most informative historical context, confirming that the policy learns structured, interpretable recall rather than attending uniformly across history.</p>
+
+  <div class="tab-bar" role="tablist" data-tabgroup="attn-vis">
+    <button class="tab-btn active" data-tab="cube-pushing" role="tab">Cube Pushing</button>
+    <button class="tab-btn"        data-tab="match-color"  role="tab">Match Color</button>
+  </div>
+
+  <div class="tab-panel active" data-tabgroup="attn-vis" data-config="cube-pushing">
+    <figure class="media-frame">
+      <video class="media-frame-video" autoplay loop muted playsinline controls preload="metadata">
+        <source src="assets/videos/attention_vis_cube_pushing.mp4" type="video/mp4">
+      </video>
+      <figcaption>Visualization of gated cross-attention weights for each 8-step action trajectory throughout one episode. <span class="math-blue">Blue</span> indicates the memory gate is on (μ<sub>t</sub>=1) and <span class="math-gray">gray</span> indicates the memory gate is off (μ<sub>t</sub>=0). During the pushing stage in Trial 4, attention focuses primarily on the outcomes from Trial 3 (undershoot) and Trial 2 (overshoot). The policy uses these past outcomes to adjust its action and achieve a successful push.</figcaption>
+    </figure>
+  </div>
+
+  <div class="tab-panel" data-tabgroup="attn-vis" data-config="match-color">
+    <figure class="media-frame">
+      <video class="media-frame-video" playsinline controls preload="auto">
+        <source src="assets/videos/attention_vis_match_color.mp4" type="video/mp4">
+      </video>
+      <figcaption>We visualize the gated cross-attention weights for each 8-step action chunk. At <em>t</em>=80, when the robot is placing the cube back, the attention focuses primarily on <em>t</em>=48, when the robot first observed the bin colors. <span class="math-blue">Blue</span> indicates the memory gate is on (μ<sub>t</sub>=1); <span class="math-gray">gray</span> indicates the gate is off (μ<sub>t</sub>=0).</figcaption>
+    </figure>
+  </div>
+</section>
+
+
+<!-- =========================================================
+     § 7 — ROBOMIMIC BENCHMARK RESULTS
+     Drop file: assets/charts/robomimic_bar_chart.png
+     Swap div → <img src="assets/charts/robomimic_bar_chart.png" alt="…">
+========================================================= -->
+<section id="robomimic">
+  <h2>Robomimic Shows Improvement with Gated Memory</h2>
+
+  <figure class="fig-centered" style="max-width: 720px;">
+    <div class="placeholder-media">assets/charts/robomimic_bar_chart.png</div>
+    <figcaption>[Caption: Success rate (%) on Robomimic benchmark tasks. Gated Memory consistently
+      outperforms both Long-History and No-History baselines across all tasks.]</figcaption>
+  </figure>
+
+  <p class="body-text">[Description: Summarize which tasks showed the largest gains, and what this result
+    implies about the generality of the gated memory approach.]</p>
+</section>
+
+
+<!-- =========================================================
+     TEAM
+     Replace each .author-photo svg with:
+       <img src="assets/images/team/firstname_lastname.jpg" alt="Name">
+========================================================= -->
+<section id="team">
+  <h2>Team</h2>
+
+  <div class="team-grid">
+
+    <div class="author-card">
+      <div class="author-photo">
+        <img src="assets/images/team/yihuai_gao.jpg" alt="Yihuai Gao">
+      </div>
+      <p class="author-name">Yihuai Gao</p>
+      <p class="author-affil">Stanford University</p>
+    </div>
+
+    <div class="author-card">
+      <div class="author-photo">
+        <!-- Drop: assets/images/team/jeff_liu.jpg -->
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-3.866 3.582-7 8-7s8 3.134 8 7"/>
+        </svg>
+      </div>
+      <p class="author-name">Jeff Liu</p>
+      <p class="author-affil">Stanford University</p>
+    </div>
+
+    <div class="author-card">
+      <div class="author-photo">
+        <img src="assets/images/team/shuang_li.jpg" alt="Shuang Li">
+      </div>
+      <p class="author-name">Shuang Li</p>
+      <p class="author-affil">Stanford University</p>
+    </div>
+
+    <div class="author-card">
+      <div class="author-photo">
+        <img src="assets/images/team/shuran_song.jpg" alt="Shuran Song">
+      </div>
+      <p class="author-name">Shuran Song <span class="corresponding" title="Corresponding author">†</span></p>
+      <p class="author-affil">Stanford University</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =========================================================
+     FOOTER
+     Edit: citation · BibTeX entry · acknowledgements · year
+========================================================= -->
+<footer id="footer">
+  <div class="container">
+
+    <div class="footer-section-label">Citation</div>
+    <p class="citation-block">
+      [Authors]. [Title]. <em>[Conference]</em>, [Year].
+    </p>
+
+    <div class="bibtex-wrapper">
+      <pre><code id="bibtex-content">@inproceedings{author2025title,
+  title     = {[Paper Title]},
+  author    = {Author A and Author B and Author C},
+  booktitle = {[Conference Name]},
+  year      = {2025},
+}</code></pre>
+      <button class="copy-btn" onclick="copyBibtex(this)">Copy BibTeX</button>
+    </div>
+
+    <div class="footer-section-label">Acknowledgements</div>
+    <p class="footer-ack">This project is affiliated with the <a href="https://real.stanford.edu/" target="_blank" rel="noopener">REALab (Robotics and Embodied Artificial Intelligence Lab)</a> at Stanford University.</p>
+
+    <p class="footer-copyright">
+      This website is licensed under a
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.
+      You are free to borrow the source code of this website. We just ask that you link back to this page in the footer.
+    </p>
+
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
