@@ -331,41 +331,37 @@
         </div>
 
         <div class="tab-panel active" data-tabgroup="casting" data-config="high_friction">
-          <!-- <p class="row-caption before">[Caption: High-friction regime. Object lands predictably; cross-trial adaptation mainly fine-tunes release timing.]</p> -->
           <div class="video-grid three-col">
             <div class="video-col">
               <div class="col-header ours">Ours (Gated Memory)</div>
-              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/high_friction/ours.mp4" type="video/mp4"></video></figure>
+              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/ours/ours_high_friction.mp4" type="video/mp4"></video></figure>
             </div>
             <div class="video-col">
               <div class="col-header">Long-History DP</div>
-              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/high_friction/long_hist_dp.mp4" type="video/mp4"></video></figure>
+              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/long_hist_dp/long_hist_high_friction.mp4" type="video/mp4"></video></figure>
             </div>
             <div class="video-col">
               <div class="col-header">No-History DP</div>
-              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/high_friction/no_hist_dp.mp4" type="video/mp4"></video></figure>
+              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/no_hist_dp/no_hist_high_friction.mp4" type="video/mp4"></video></figure>
             </div>
           </div>
-          <!-- <p class="row-caption after">[Gated Memory achieves highest success rate under high-friction conditions.]</p> -->
         </div>
 
         <div class="tab-panel" data-tabgroup="casting" data-config="low_friction">
-          <!-- <p class="row-caption before">[Caption: Low-friction regime. Object slides after landing, requiring the policy to compensate via cross-trial recall.]</p> -->
           <div class="video-grid three-col">
             <div class="video-col">
               <div class="col-header ours">Ours (Gated Memory)</div>
-              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/low_friction/ours.mp4" type="video/mp4"></video></figure>
+              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/ours/ours_low_friction.mp4" type="video/mp4"></video></figure>
             </div>
             <div class="video-col">
               <div class="col-header">Long-History DP</div>
-              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/low_friction/long_hist_dp.mp4" type="video/mp4"></video></figure>
+              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/long_hist_dp/long_hist_low_friction.mp4" type="video/mp4"></video></figure>
             </div>
             <div class="video-col">
               <div class="col-header">No-History DP</div>
-              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/low_friction/no_hist_dp.mp4" type="video/mp4"></video></figure>
+              <figure><video autoplay loop controls muted playsinline preload="auto" style="width:100%;border-radius:6px;"><source src="assets/videos/cross_trial/casting/no_hist_dp/no_hist_low_friction.mp4" type="video/mp4"></video></figure>
             </div>
           </div>
-          <!-- <p class="row-caption after">[Cross-trial adaptation is critical under low friction; Gated Memory is the only policy to adapt reliably.]</p> -->
         </div>
     </div><!-- /.task-videos-full -->
   </div><!-- /#cross-trial-casting -->
@@ -876,8 +872,8 @@
   </div>
 
   <div class="tab-panel active" data-tabgroup="attn-vis" data-config="cube-pushing">
-    <figure class="media-frame">
-      <video class="media-frame-video" autoplay loop muted playsinline controls preload="metadata">
+    <figure style="max-width:720px;margin:0 auto 1rem;">
+      <video autoplay loop muted playsinline controls preload="auto" style="width:100%;border-radius:6px;">
         <source src="assets/videos/attention_vis_cube_pushing.mp4" type="video/mp4">
       </video>
       <figcaption>Visualization of gated cross-attention weights for each 8-step action trajectory throughout one episode. <span class="math-blue">Blue</span> indicates the memory gate is on (μ<sub>t</sub>=1) and <span class="math-gray">gray</span> indicates the memory gate is off (μ<sub>t</sub>=0). During the pushing stage in Trial 4, attention focuses primarily on the outcomes from Trial 3 (undershoot) and Trial 2 (overshoot). The policy uses these past outcomes to adjust its action and achieve a successful push.</figcaption>
@@ -885,8 +881,8 @@
   </div>
 
   <div class="tab-panel" data-tabgroup="attn-vis" data-config="match-color">
-    <figure class="media-frame">
-      <video class="media-frame-video" playsinline controls preload="auto">
+    <figure style="max-width:720px;margin:0 auto 1rem;">
+      <video autoplay loop muted playsinline controls preload="auto" style="width:100%;border-radius:6px;">
         <source src="assets/videos/attention_vis_match_color.mp4" type="video/mp4">
       </video>
       <figcaption>We visualize the gated cross-attention weights for each 8-step action chunk. At <em>t</em>=80, when the robot is placing the cube back, the attention focuses primarily on <em>t</em>=48, when the robot first observed the bin colors. <span class="math-blue">Blue</span> indicates the memory gate is on (μ<sub>t</sub>=1); <span class="math-gray">gray</span> indicates the gate is off (μ<sub>t</sub>=0).</figcaption>

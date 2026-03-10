@@ -432,21 +432,6 @@ figcaption {
   width: 100%;
 }
 
-.media-frame-video {
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 8px;
-  background: #000;
-}
-
-.media-frame {
-  width: 100%;
-  max-width: 720px;
-  margin: 0 auto 1rem;
-  overflow: hidden;
-}
 
 #gating-training .fig-centered {
   overflow: visible;
@@ -523,7 +508,6 @@ figcaption {
   display: flex;
   flex-direction: column;
   min-width: 0; /* allow grid items to shrink below min-content width */
-  overflow: hidden;
 }
 
 /* Column label above each video ("Ours", "Long-History DP", etc.) */

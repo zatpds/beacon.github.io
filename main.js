@@ -1,7 +1,9 @@
 /* =========================================================
    main.js — Minimal interaction for the research page
    1. Tab switching  (all experiment subsections)
-   2. BibTeX copy button (Footer)
+   2. Autoplay all muted videos via IntersectionObserver
+      (cross-browser: Chrome, Firefox, Safari, Edge)
+   3. BibTeX copy button (Footer)
 ========================================================= */
 
 /* ---------------------------------------------------------
@@ -56,6 +58,45 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
     });
   });
 });
+
+
+/* ---------------------------------------------------------
+   VIDEO AUTOPLAY — cross-browser via IntersectionObserver
+   • Plays any muted video when ≥30% is visible in viewport.
+   • Pauses when it leaves. Works for active tab panels on
+     page load and after tab switches.
+   • Covers Chrome, Firefox, Safari (desktop + iOS), Edge.
+--------------------------------------------------------- */
+(function () {
+  // Track videos the user has interacted with — once they click
+  // pause or scrub, stop all auto-play interference.
+  var userTouched = new WeakSet();
+
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting && entry.target.paused && !userTouched.has(entry.target)) {
+        entry.target.play().catch(function () {});
+      }
+    });
+  }, { threshold: 0.3 });
+
+  function observeVideos() {
+    document.querySelectorAll('video[autoplay]').forEach(function (vid) {
+      obs.observe(vid);
+
+      // Once the user clicks pause, never auto-play this video again.
+      vid.addEventListener('pause', function () {
+        userTouched.add(vid);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', observeVideos);
+  } else {
+    observeVideos();
+  }
+})();
 
 
 /* ---------------------------------------------------------
