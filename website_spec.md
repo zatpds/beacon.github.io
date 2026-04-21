@@ -142,7 +142,7 @@ Goal: user never sees a buffering spinner; Chrome's decoder pool is never floode
 
 - **Intent layer**. Videos are sorted in DOM order. A frontier advances so that `AHEAD` (15) videos ahead of the near viewport edge are queued. Visibility and tab click events can promote videos to the front of the queue.
 - **Prefetch layer**. A FIFO queue drained during browser idle time (`requestIdleCallback` with a 1500ms timeout fallback). Concurrency capped at `MAX_INFLIGHT` (4) with `canplaythrough` freeing a slot. `fetchPriority="low"` deprioritises these requests below user critical ones.
-- **Playback layer**. `IntersectionObserver` at `threshold: 0.25` plays videos that are visible and pauses them the moment they leave. User initiated pause is remembered (the observer won't re-start it).
+- **Playback layer**. `IntersectionObserver` at `threshold: 0.25` plays videos that are visible and pauses them the moment they leave. Scrolling back to a previously seen video auto-resumes it.
 
 Save-Data and 2G connections downshift to `AHEAD=2, MAX_INFLIGHT=2`.
 

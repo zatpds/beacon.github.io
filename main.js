@@ -68,7 +68,6 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
 
   var videos = [], frontier = -1, inflight = 0, queue = [];
   var state = new WeakMap();  // vid state: 'queued' | 'loading' | 'ready'
-  var userPaused = new WeakSet();
 
   // Prefetch layer
   function onDone() {
@@ -135,13 +134,14 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
     });
   });
 
-  // Playback layer
+  // Playback layer: play when visible, pause when off screen, resume on
+  // re-entry. Scrolling back to a previously seen video resumes it.
   var playObs = new IntersectionObserver(function (es) {
     es.forEach(function (e) {
       var v = e.target;
       if (e.isIntersecting) {
         if (state.get(v) !== 'ready') enqueue(v, true);
-        if (v.paused && !userPaused.has(v)) v.play().catch(function () {});
+        if (v.paused) v.play().catch(function () {});
       } else if (!v.paused) v.pause();
     });
   }, { threshold: VISIBLE });
@@ -152,10 +152,6 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
     videos.forEach(function (v) {
       nearObs.observe(v);
       playObs.observe(v);
-      v.addEventListener('pause', function () {
-        var r = v.getBoundingClientRect();
-        if (r.top < innerHeight && r.bottom > 0) userPaused.add(v);
-      });
     });
     advance(AHEAD - 1);   // seed
   }
