@@ -143,6 +143,18 @@ a:hover { text-decoration: underline; text-underline-offset: 2px; }
 
 strong { font-weight: 600; color: var(--text); }
 
+/* Inline highlight: subtle accent-tinted wash behind a phrase, like a
+   highlighter pen in the site's warm palette. Works inside body text. */
+.highlight {
+  background: rgba(var(--accent-rgb), 0.15);
+  color: var(--text);
+  font-weight: 500;
+  padding: 0 0.28em;
+  border-radius: 3px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 /* Eyebrow label above section titles (two line hierarchy) */
 .section-label {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
@@ -842,56 +854,20 @@ figcaption {
   max-width: 280px;
 }
 
-/* IN THE WILD BLOCK (Cup task) */
-.in-the-wild-block {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
+/* IN THE WILD: own chapter, banner-style grid video */
+#in-the-wild .full-bleed {
+  margin-top: 1.8rem;
 }
 
-.in-the-wild-block h4 {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.in-the-wild-block figure {
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-/* PLACEHOLDER MEDIA: drop in while the real asset is pending.
- * Replace <div class="placeholder-media"> with <video ...> when ready. */
-.placeholder-media {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border-radius: 6px;
-  background: var(--bg-alt);
-  border: 1px dashed var(--border-hi);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: var(--text-muted);
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.78rem;
-  letter-spacing: 0.02em;
-  padding: 1rem;
-  text-align: center;
-}
-
-.placeholder-media::before {
-  content: '';
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: var(--accent-soft);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23b5552a'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: 54% 50%;
-  background-size: 18px;
+/* FULL BLEED MEDIA
+ * Breaks an element out of the content column so it spans the full
+ * viewport width. Negative margins cancel the container's centering. */
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  display: block;
+  border-radius: 0;
 }
 
 /* TEAM SECTION */
@@ -1107,6 +1083,7 @@ a.author-card:hover .author-photo {
  * room between chapters. */
 #cross-trial,
 #in-trial,
+#in-the-wild,
 #method,
 #attention,
 #benchmark,
@@ -1119,6 +1096,7 @@ a.author-card:hover .author-photo {
 @media (max-width: 768px) {
   #cross-trial,
   #in-trial,
+  #in-the-wild,
   #method,
   #attention,
   #benchmark,

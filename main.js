@@ -205,7 +205,7 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
  */
 (function () {
   var sections = document.querySelectorAll(
-    '#cross-trial, #in-trial, #method, #attention, #benchmark, #faq, #team'
+    '#cross-trial, #in-trial, #in-the-wild, #method, #attention, #benchmark, #faq, #team'
   );
 
   var obs = new IntersectionObserver(function (entries, self) {
@@ -236,14 +236,21 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
   var firstMainSection = document.getElementById('cross-trial');
   var links = nav.querySelectorAll('.toc-link');
 
-  // Visible once the first content section enters view, hidden at the footer.
+  // Visible once the first content section enters view, hidden at the footer
+  // and while any full-bleed section is on screen (so it does not overlap
+  // the video banner).
   var footer = document.getElementById('footer');
+  var bleedSections = [document.getElementById('in-the-wild')].filter(Boolean);
   if (firstMainSection) {
     var updateNavVisibility = function () {
       var triggerY = firstMainSection.offsetTop - (window.innerHeight * 0.18);
       var pastStart = window.scrollY >= triggerY;
       var atFooter  = footer && (window.scrollY + window.innerHeight >= footer.offsetTop + 40);
-      nav.classList.toggle('visible', pastStart && !atFooter);
+      var overBleed = bleedSections.some(function (el) {
+        var r = el.getBoundingClientRect();
+        return r.top < window.innerHeight && r.bottom > 0;
+      });
+      nav.classList.toggle('visible', pastStart && !atFooter && !overBleed);
     };
 
     updateNavVisibility();

@@ -18,7 +18,8 @@ mem_website/
   style.css           all visual styling
   main.js             tab switching, video preload, section reveal, TOC, BibTeX
   website_spec.md     this file
-  scripts/            python chart generators (plot_success_rate.py, plot_robomimic.py)
+  scripts/            python generators (plot_success_rate.py, plot_robomimic.py,
+                      make_in_the_wild_grid.py)
   paper/              dated paper PDFs (latest one is linked from the "Paper" button)
   assets/
     favicon.png
@@ -60,7 +61,7 @@ All tokens live in `style.css` under `:root`. Changing them propagates site wide
 
 - Max content width: `960px`, centered via `margin: 0 auto`.
 - Section horizontal padding: `24px` (token `--pad-x`), collapses to single column at `max-width: 640px`.
-- Top level sections (`#cross-trial`, `#in-trial`, `#method`, `#attention`, `#benchmark`, `#faq`, `#team`) have `padding-top: 140px; padding-bottom: 140px` to give chapter breaks. Free scroll, no snap.
+- Top level sections (`#cross-trial`, `#in-trial`, `#in-the-wild`, `#method`, `#attention`, `#benchmark`, `#faq`, `#team`) have `padding-top: 140px; padding-bottom: 140px` to give chapter breaks. Free scroll, no snap.
 - Only network dependency: Google Fonts.
 
 ### Motion
@@ -154,7 +155,7 @@ The hero teaser renders as a thumbnail (`i.ytimg.com/vi/<id>/maxresdefault.jpg`)
 
 ### 4. Section slide in
 
-One `IntersectionObserver` watches each top level section (`#cross-trial`, `#in-trial`, `#method`, `#attention`, `#benchmark`, `#faq`, `#team`). When a section enters the viewport (`threshold: 0.04`), `.is-visible` is added and the whole section slides up 90px and fades in over 0.9s. Fires once per section. Sections already in the viewport on load are not animated.
+One `IntersectionObserver` watches each top level section (`#cross-trial`, `#in-trial`, `#in-the-wild`, `#method`, `#attention`, `#benchmark`, `#faq`, `#team`). When a section enters the viewport (`threshold: 0.04`), `.is-visible` is added and the whole section slides up 90px and fades in over 0.9s. Fires once per section. Sections already in the viewport on load are not animated.
 
 ### 5. Sticky TOC nav
 
@@ -172,6 +173,7 @@ Clipboard API with an `execCommand` fallback. Button shows "Copied!" for 2 secon
 | `#intro-split` | Teaser video + abstract | YouTube iframe + abstract paragraphs       |
 | `#cross-trial` | Cross Trial Memory      | Pushing, Casting, Flinging subsections     |
 | `#in-trial`    | In Trial Memory         | Place Back (Real), Match Color, Place Back |
+| `#in-the-wild` | Outdoor Generalization  | Full-bleed 8×5 grid of 40 outdoor trials   |
 | `#method`      | Method                  | Architecture + Gating Mechanism (zigzag)   |
 | `#attention`   | Attention Visualization | Tabs for cube pushing and match color      |
 | `#benchmark`   | Benchmark Performance   | RoboMimic + Mikasa Robo stacked            |
@@ -195,8 +197,9 @@ Edit `--accent` and `--accent-rgb` under `:root` in `style.css`. Tabs, links, au
 
 ```bash
 cd /Users/jinyun/Documents/mem_website/scripts
-python plot_success_rate.py   # per task success rate bars + mikasa benchmark
-python plot_robomimic.py      # robomimic grouped bar chart
+python plot_success_rate.py      # per task success rate bars + mikasa benchmark
+python plot_robomimic.py         # robomimic grouped bar chart
+python make_in_the_wild_grid.py  # 8x5 grid of 40 outdoor trials (in-the-wild section)
 ```
 
 Each script uses the site palette tokens defined at the top of the file.
