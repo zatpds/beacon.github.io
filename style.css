@@ -590,7 +590,7 @@ figcaption {
 
 /* Inline math color helpers used in figure captions */
 .math-gray { color: var(--text-muted); font-style: normal; }
-.math-blue { color: var(--accent); font-style: normal; }
+.math-blue { color: #0062FF; font-style: normal; }
 
 /* Centered full-width figures (architecture, gating diagram, robomimic chart) */
 .fig-centered {
