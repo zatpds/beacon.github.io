@@ -19,6 +19,7 @@ mem_website/
   main.js             tab switching, video preload, section reveal, TOC, BibTeX
   website_spec.md     this file
   scripts/            python chart generators (plot_success_rate.py, plot_robomimic.py)
+  paper/              dated paper PDFs (latest one is linked from the "Paper" button)
   assets/
     favicon.png
     images/           team headshots, architecture/gating PNGs, hf-logo.svg, overlays
@@ -131,7 +132,7 @@ JS adds `.visible` to `#toc-nav` after the hero leaves view, and `.active` to th
 
 ## JS architecture
 
-`main.js` is organised into five independent blocks.
+`main.js` is organised into six independent blocks.
 
 ### 1. Tab switching
 
@@ -142,20 +143,24 @@ Generic handler attached per `.tab-bar`. On click it removes `.active` from sibl
 Goal: user never sees a buffering spinner; Chrome's decoder pool is never flooded.
 
 - **Intent layer**. Videos are sorted in DOM order. A frontier advances so that `AHEAD` (15) videos ahead of the near viewport edge are queued. Visibility and tab click events can promote videos to the front of the queue.
-- **Prefetch layer**. A FIFO queue drained during browser idle time (`requestIdleCallback` with a 1500ms timeout fallback). Concurrency capped at `MAX_INFLIGHT` (4) with `canplaythrough` freeing a slot. `fetchPriority="low"` deprioritises these requests below user critical ones.
+- **Prefetch layer**. A FIFO queue drained during browser idle time (`requestIdleCallback` with a 1500ms timeout fallback). Concurrency capped at `MAX_INFLIGHT` (4) with `canplaythrough` freeing a slot. `fetchPriority` is `high` for videos laid out within 1.2x the viewport height at boot ("hot start") and `low` for everything else, so the first screen never waits behind below-fold prefetches.
 - **Playback layer**. `IntersectionObserver` at `threshold: 0.25` plays videos that are visible and pauses them the moment they leave. Scrolling back to a previously seen video auto-resumes it.
 
 Save-Data and 2G connections downshift to `AHEAD=2, MAX_INFLIGHT=2`.
 
-### 3. Section slide in
+### 3. YouTube facade
+
+The hero teaser renders as a thumbnail (`i.ytimg.com/vi/<id>/maxresdefault.jpg`) plus a play button. The real YouTube iframe is only inserted on click/Enter/Space. Saves ~500KB of YouTube JS/CSS on first paint and keeps bandwidth available for comparison videos.
+
+### 4. Section slide in
 
 One `IntersectionObserver` watches each top level section (`#cross-trial`, `#in-trial`, `#method`, `#attention`, `#benchmark`, `#faq`, `#team`). When a section enters the viewport (`threshold: 0.04`), `.is-visible` is added and the whole section slides up 90px and fades in over 0.9s. Fires once per section. Sections already in the viewport on load are not animated.
 
-### 4. Sticky TOC nav
+### 5. Sticky TOC nav
 
 Visible from the first content section through to just before the footer. Uses a scroll listener (passive) plus an `IntersectionObserver` (rootMargin `-15% 0 -75% 0`) to highlight the current section.
 
-### 5. BibTeX copy
+### 6. BibTeX copy
 
 Clipboard API with an `execCommand` fallback. Button shows "Copied!" for 2 seconds.
 

@@ -37,7 +37,7 @@
   <h1 class="paper-title">Gated Memory Policy</h1>
   <p class="authors">
     <a href="https://yihuai-gao.github.io/" target="_blank" rel="noopener">Yihuai Gao</a>,
-    Jinyun (Jeff) Liu,
+    Jeff Jinyun Liu,
     <a href="https://shuangli59.github.io/" target="_blank" rel="noopener">Shuang Li</a>,
     <a href="https://shurans.github.io/" target="_blank" rel="noopener">Shuran Song</a><span class="corresponding" title="Corresponding author">†</span>
   </p>
@@ -46,8 +46,8 @@
 
   <div class="link-buttons">
 
-    <!-- Paper -->
-    <a href="#" class="btn-link">
+    <!-- Paper: update href to the newest PDF under paper/ on each iteration -->
+    <a href="paper/Gated_Memory_Policy_2026-04-21.pdf" target="_blank" rel="noopener" class="btn-link">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
            stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -86,10 +86,20 @@
       Code
     </a>
 
-    <!-- Hugging Face: checkpoints and datasets -->
-    <a href="#" class="btn-link btn-link-hf" aria-label="Hugging Face: checkpoints and datasets">
+    <!-- Hugging Face model -->
+    <a href="https://huggingface.co/yihuai-gao/gated-memory-policy/tree/main"
+       target="_blank" rel="noopener"
+       class="btn-link btn-link-hf" aria-label="Hugging Face model checkpoints">
       <img class="hf-logo" src="assets/images/hf-logo.svg" alt="">
-      Hugging Face
+      Model
+    </a>
+
+    <!-- Hugging Face dataset -->
+    <a href="https://huggingface.co/datasets/yihuai-gao/gated-memory-policy"
+       target="_blank" rel="noopener"
+       class="btn-link btn-link-hf" aria-label="Hugging Face dataset">
+      <img class="hf-logo" src="assets/images/hf-logo.svg" alt="">
+      Dataset
     </a>
 
   </div>
@@ -99,16 +109,12 @@
 
 
 <section id="intro-split">
-  <!-- HERO TEASER VIDEO (replace VIDEO_ID with your YouTube id) -->
-  <div id="hero-video">
-    <iframe
-      src="https://www.youtube.com/embed/hUj7krAj2Wk?rel=0&controls=1&fs=1&modestbranding=1&playsinline=1&vq=hd1080"
-      title="Teaser Video"
-      loading="lazy"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen>
-    </iframe>
+  <!-- HERO TEASER VIDEO
+       YouTube facade: only the thumbnail loads on first paint. Clicking
+       swaps in the real iframe (see YOUTUBE FACADE in main.js). -->
+  <div id="hero-video" data-ytid="hUj7krAj2Wk" role="button" tabindex="0" aria-label="Play teaser video">
+    <img src="https://i.ytimg.com/vi/hUj7krAj2Wk/maxresdefault.jpg" alt="Teaser video thumbnail">
+    <span class="yt-play" aria-hidden="true"></span>
   </div>
 
 
@@ -985,7 +991,7 @@
           <path d="M4 20c0-3.866 3.582-7 8-7s8 3.134 8 7"/>
         </svg>
       </div>
-      <p class="author-name">Jinyun (Jeff) Liu</p>
+      <p class="author-name">Jeff Jinyun Liu</p>
       <p class="author-affil">Stanford University</p>
     </div>
 

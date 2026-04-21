@@ -2,9 +2,10 @@
  * main.js
  *   1. Tab switching
  *   2. Video preload + playback (three layer design)
- *   3. Section slide in on scroll
- *   4. Sticky TOC nav with section highlight
- *   5. BibTeX copy button
+ *   3. YouTube facade (click to load teaser iframe)
+ *   4. Section slide in on scroll
+ *   5. Sticky TOC nav with section highlight
+ *   6. BibTeX copy button
  */
 
 /* TAB SWITCHING
@@ -85,7 +86,7 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
       state.set(v, 'loading');
       inflight++;
       v.preload = 'auto';
-      if ('fetchPriority' in v) v.fetchPriority = 'low';
+      if ('fetchPriority' in v) v.fetchPriority = v.dataset.hot ? 'high' : 'low';
       v.addEventListener('canplaythrough', onDone);
       v.addEventListener('error', onDone);
       try { v.load(); } catch (e) { onDone.call(v); }
@@ -153,11 +154,47 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
       nearObs.observe(v);
       playObs.observe(v);
     });
-    advance(AHEAD - 1);   // seed
+    // Hot start: videos already laid out near the viewport bypass idle
+    // scheduling and load at fetchPriority=high so the first screen does
+    // not wait behind YouTube or anything else.
+    var horizon = window.innerHeight * 1.2;
+    videos.forEach(function (v) {
+      var r = v.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < horizon) {
+        v.dataset.hot = '1';
+        state.set(v, 'queued');
+        queue.push(v);
+      }
+    });
+    pump();
+    advance(AHEAD - 1);   // cold seed for everything further down
   }
   document.readyState === 'loading'
     ? document.addEventListener('DOMContentLoaded', wire)
     : wire();
+})();
+
+
+/* YOUTUBE FACADE
+ * The teaser shows a thumbnail on first paint; the real iframe is only
+ * fetched when the user clicks. Saves ~500KB of YouTube JS/CSS and frees
+ * bandwidth for the first row of comparison videos.
+ */
+(function () {
+  var el = document.getElementById('hero-video');
+  if (!el || !el.dataset.ytid) return;
+  var load = function () {
+    el.innerHTML = '<iframe src="https://www.youtube.com/embed/' +
+      el.dataset.ytid +
+      '?autoplay=1&rel=0&controls=1&fs=1&modestbranding=1&playsinline=1&vq=hd1080" ' +
+      'title="Teaser video" allowfullscreen ' +
+      'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+      'referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+  };
+  el.addEventListener('click', load);
+  el.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); load(); }
+  });
 })();
 
 

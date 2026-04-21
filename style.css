@@ -473,25 +473,59 @@ section > .body-text { margin-bottom: 2rem; }
   gap: 20px;
 }
 
+/* YouTube facade: thumbnail + play button until clicked. */
 #hero-video {
-  padding: 0;
-  background: transparent;
-}
-
-#hero-video {
+  position: relative;
   max-width: 680px;
-  margin: 0 auto;
   width: 100%;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+  cursor: pointer;
 }
 
+#hero-video img,
 #hero-video iframe {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  height: auto;
-  margin: 0;
+  height: 100%;
   display: block;
   border: 0;
-  border-radius: 4px;
+}
+
+#hero-video img { object-fit: cover; }
+
+#hero-video .yt-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.72);
+  pointer-events: none;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+#hero-video .yt-play::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-left: 18px solid #fff;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+}
+
+#hero-video:hover .yt-play,
+#hero-video:focus-visible .yt-play {
+  background: var(--accent);
+  transform: translate(-50%, -50%) scale(1.05);
 }
 
 #abstract {
@@ -1332,7 +1366,7 @@ a.author-card:hover .author-photo {
     gap: 24px;
     padding: 36px var(--pad-x);
   }
-  #hero-video iframe { border-radius: 8px; }
+  #hero-video { border-radius: 8px; }
 
   .team-grid { gap: 28px 24px; }
   .author-card { width: 100px; }
