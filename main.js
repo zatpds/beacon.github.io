@@ -69,14 +69,22 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
 
   var videos = [], frontier = -1, inflight = 0, queue = [];
   var state = new WeakMap();  // vid state: 'queued' | 'loading' | 'ready'
+  var timers = new WeakMap();
 
   // Prefetch layer
+  // Safari/WebKit rarely fires `canplaythrough` for MP4s, which would leave
+  // `inflight` pinned and stall the queue. We listen to `canplay` (fires on
+  // every mainstream browser once the first frame is decodable) and add a
+  // timeout safety net so a flaky load can't block the pipeline either.
   function onDone() {
     if (state.get(this) === 'ready') return;
     state.set(this, 'ready');
     inflight--;
-    this.removeEventListener('canplaythrough', onDone);
+    this.removeEventListener('canplay', onDone);
+    this.removeEventListener('loadeddata', onDone);
     this.removeEventListener('error', onDone);
+    var t = timers.get(this);
+    if (t) { clearTimeout(t); timers.delete(this); }
     if (queue.length) schedule(pump);
   }
   function pump() {
@@ -87,8 +95,10 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
       inflight++;
       v.preload = 'auto';
       if ('fetchPriority' in v) v.fetchPriority = v.dataset.hot ? 'high' : 'low';
-      v.addEventListener('canplaythrough', onDone);
+      v.addEventListener('canplay', onDone);
+      v.addEventListener('loadeddata', onDone);
       v.addEventListener('error', onDone);
+      timers.set(v, setTimeout(onDone.bind(v), 8000));
       try { v.load(); } catch (e) { onDone.call(v); }
     }
   }
@@ -137,12 +147,14 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
 
   // Playback layer: play when visible, pause when off screen, resume on
   // re-entry. Scrolling back to a previously seen video resumes it.
+  // Safari requires the muted *property* (not just the attribute) to be true
+  // at the moment play() is called, or its autoplay policy rejects the call.
   var playObs = new IntersectionObserver(function (es) {
     es.forEach(function (e) {
       var v = e.target;
       if (e.isIntersecting) {
         if (state.get(v) !== 'ready') enqueue(v, true);
-        if (v.paused) v.play().catch(function () {});
+        if (v.paused) { v.muted = true; v.play().catch(function () {}); }
       } else if (!v.paused) v.pause();
     });
   }, { threshold: VISIBLE });
