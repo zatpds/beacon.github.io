@@ -50,12 +50,12 @@ TASKS = {
         {"label": "mh-PTP",      "value": 2,   "err": 0, "ours": False},
         {"label": "lh-DP",       "value": 28,  "err": 0, "ours": False},
         {"label": "lh-PTP",      "value": 32,  "err": 0, "ours": False},
-        {"label": "Ours\n(GMP)", "value": 97,   "err": 0, "ours": True },
+        {"label": "Ours", "value": 97,   "err": 0, "ours": True },
     ],
     "cross_trial/casting": [
         {"label": "nh-DP",       "value": 5,    "err": 0, "ours": False},
         {"label": "lh-DP",       "value": 20,   "err": 0, "ours": False},
-        {"label": "Ours\n(GMP)", "value": 95,   "err": 0, "ours": True },
+        {"label": "Ours", "value": 95,   "err": 0, "ours": True },
     ],
     "cross_trial/flinging": [
         {"label": "nh-DP",       "value": 54,   "err": 0, "ours": False},
@@ -63,12 +63,12 @@ TASKS = {
         {"label": "mh-PTP",      "value": 54,   "err": 0, "ours": False},
         {"label": "lh-DP",       "value": 65,   "err": 0, "ours": False},
         {"label": "lh-PTP",      "value": 69,   "err": 0, "ours": False},
-        {"label": "Ours\n(GMP)", "value": 81,   "err": 0, "ours": True },
+        {"label": "Ours", "value": 81,   "err": 0, "ours": True },
     ],
     "in_trial/place_back_real": [
         {"label": "nh-DP",       "value": 10,   "err": 0, "ours": False},
         {"label": "lh-DP",       "value": 62.5, "err": 0, "ours": False},
-        {"label": "Ours\n(GMP)", "value": 85,   "err": 0, "ours": True },
+        {"label": "Ours", "value": 85,   "err": 0, "ours": True },
     ],
     "in_trial/match_color": [
         {"label": "nh-DP",       "value": 16,   "err": 0, "ours": False},
@@ -76,7 +76,7 @@ TASKS = {
         {"label": "mh-PTP",      "value": 35,   "err": 0, "ours": False},
         {"label": "lh-DP",       "value": 100,  "err": 0, "ours": False},
         {"label": "lh-PTP",      "value": 100,  "err": 0, "ours": False},
-        {"label": "Ours\n(GMP)", "value": 100,  "err": 0, "ours": True },
+        {"label": "Ours", "value": 100,  "err": 0, "ours": True },
     ],
     "in_trial/place_back": [
         {"label": "nh-DP",       "value": 18,   "err": 0, "ours": False},
@@ -84,7 +84,7 @@ TASKS = {
         {"label": "mh-PTP",      "value": 56,   "err": 0, "ours": False},
         {"label": "lh-DP",       "value": 100,  "err": 0, "ours": False},
         {"label": "lh-PTP",      "value": 100,  "err": 0, "ours": False},
-        {"label": "Ours\n(GMP)", "value": 98,   "err": 0, "ours": True },
+        {"label": "Ours", "value": 98,   "err": 0, "ours": True },
     ],
 }
 
@@ -153,17 +153,10 @@ def plot_task(out_path: str, entries: list) -> None:
     else:
         rotation, xlabel_fs = 38, 17
     rotate = rotation > 0
-    # When rotated, a 2-line "Ours\n(GMP)" reads awkwardly and its wider
-    # "(GMP)" tail runs into the previous label. Drop the parenthetical and
-    # keep just "Ours" — the accent color already signals it's ours.
-    xlabels = [
-        ("Ours" if (rotate and "Ours" in lbl) else lbl.replace("\n", " " if rotate else "\n"))
-        for lbl in labels
-    ]
 
     ax.set_xticks(x)
     ax.set_xticklabels(
-        xlabels,
+        labels,
         fontsize=xlabel_fs,
         color=TEXT,
         linespacing=1.2,
@@ -225,7 +218,7 @@ def plot_task(out_path: str, entries: list) -> None:
 MIKASA_TASKS   = ["ShellGameTouch", "InterceptMedium", "RememberColor3",
                   "RememberColor5", "RememberColor9"]
 MIKASA_METHODS = ["Octo-small", "OpenVLA", "SpatialVLA", "π0", "MemoryVLA",
-                  "GMP (ours)"]
+                  "Ours"]
 
 # values[method][task]
 MIKASA_VALUES = [
@@ -255,7 +248,7 @@ def plot_mikasa(out_path: str) -> None:
 
     for i, method in enumerate(MIKASA_METHODS):
         color   = MIKASA_COLORS[i]
-        is_ours = (method == "GMP (ours)")
+        is_ours = (method == "Ours")
         bars = ax.bar(
             task_positions + offsets[i],
             MIKASA_VALUES[i],
@@ -271,19 +264,19 @@ def plot_mikasa(out_path: str) -> None:
                 bar.get_height() + 1.4,
                 str(val),
                 ha="center", va="bottom",
-                fontsize=12,
+                fontsize=11,
                 color=ACCENT if is_ours else TEXT_MUTED,
                 fontweight="bold" if is_ours else "normal",
             )
 
     ax.set_ylim(0, 118)
     ax.set_yticks([0, 25, 50, 75, 100])
-    ax.set_yticklabels(["0", "25", "50", "75", "100"], fontsize=15, color=TEXT_MUTED)
+    ax.set_yticklabels(["0", "25", "50", "75", "100"], fontsize=14, color=TEXT_MUTED)
 
     ax.set_xticks(task_positions)
-    ax.set_xticklabels(MIKASA_TASKS, fontsize=16, color=TEXT)
+    ax.set_xticklabels(MIKASA_TASKS, fontsize=14.5, color=TEXT)
 
-    ax.set_ylabel("Success Rate (%)", fontsize=15, color=TEXT_MUTED, labelpad=6)
+    ax.set_ylabel("Success Rate (%)", fontsize=13, color=TEXT_MUTED, labelpad=5)
 
     ax.yaxis.grid(True, color=BORDER, linewidth=0.45, zorder=0)
     ax.set_axisbelow(True)
@@ -295,10 +288,10 @@ def plot_mikasa(out_path: str) -> None:
 
     ax.legend(
         loc="upper center",
-        bbox_to_anchor=(0.5, -0.32),
+        bbox_to_anchor=(0.5, -0.28),
         ncol=6,
         frameon=False,
-        fontsize=14,
+        fontsize=10.5,
         labelcolor=TEXT,
         handlelength=1.4,
         handleheight=1.1,

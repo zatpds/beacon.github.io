@@ -42,7 +42,7 @@ METHODS = [
     "Long-hist DP",
     "Long-hist PTP",
     "BC-RNN",
-    "GMP (ours)",
+    "Ours",
 ]
 
 # ── Data (read off exp7_robomimic.jpg) ────────────────────────────────────────
@@ -79,8 +79,10 @@ bar_w     = 0.11          # width of each individual bar
 group_gap = 0.18          # extra gap between task groups
 group_w   = n_methods * bar_w + group_gap
 
-fig_w = 13.0
-fig_h = 2.4
+# Match mikasa_benchmark.svg's figure dimensions so the two charts render
+# the same text size at equal column widths on the page.
+fig_w = 11.5
+fig_h = 2.7
 
 fig, ax = plt.subplots(figsize=(fig_w, fig_h))
 fig.set_facecolor(BG)
@@ -154,9 +156,9 @@ legend = ax.legend(
     columnspacing=1.0,
     labelcolor=TEXT,
 )
-# Bold the "GMP (ours)" legend label
+# Bold the "Ours" legend label
 for text, method in zip(legend.get_texts(), METHODS):
-    if method == "GMP (ours)":
+    if method == "Ours":
         text.set_color(ACCENT)
         text.set_fontweight("bold")
 
