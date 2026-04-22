@@ -144,6 +144,47 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
     });
   });
 
+  // <details> hides children with display:none until open, so
+  // IntersectionObserver never fires for videos inside a closed FAQ and
+  // browsers skip `preload` on hidden <video> elements. When the user
+  // opens one, we proactively load what's inside:
+  //   - autoplay loops → enqueue in the prefetch frontier + start playing
+  //   - controls videos → kick `preload="auto"` so the progress bar scrubs
+  //     against buffered content without first waiting for user interaction
+  function wireDetails() {
+    document.querySelectorAll('details').forEach(function (d) {
+      if (d.dataset.videoWired) return;
+      d.dataset.videoWired = '1';
+      d.addEventListener('toggle', function () {
+        if (!d.open) return;
+        d.querySelectorAll('video').forEach(function (v) {
+          if (v.hasAttribute('autoplay')) {
+            enqueue(v, true);
+            v.muted = true;
+            if (v.paused) v.play().catch(function () {});
+          } else {
+            v.preload = 'auto';
+            try { v.load(); } catch (e) {}
+          }
+        });
+      });
+    });
+  }
+
+  // Apply any data-playbackrate="N" overrides. Some browsers reset the
+  // rate on load() or source change, so also reapply on 'loadedmetadata'
+  // and 'play'. Chrome/Firefox cap at 16; Safari is more restrictive.
+  function applyRates() {
+    document.querySelectorAll('video[data-playbackrate]').forEach(function (v) {
+      var rate = parseFloat(v.dataset.playbackrate);
+      if (!(rate > 0)) return;
+      var set = function () { v.playbackRate = rate; };
+      set();
+      v.addEventListener('loadedmetadata', set);
+      v.addEventListener('play', set);
+    });
+  }
+
   // Playback layer: play when visible, pause when off screen, resume on
   // re-entry. Scrolling back to a previously seen video resumes it.
   // Safari requires the muted *property* (not just the attribute) to be true
@@ -179,6 +220,8 @@ document.querySelectorAll('.tab-bar[data-tabgroup]').forEach(function (tabBar) {
     });
     pump();
     advance(AHEAD - 1);   // cold seed for everything further down
+    wireDetails();
+    applyRates();
   }
   document.readyState === 'loading'
     ? document.addEventListener('DOMContentLoaded', wire)

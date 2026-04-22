@@ -145,6 +145,15 @@ a:hover { text-decoration: underline; text-underline-offset: 2px; }
 
 strong { font-weight: 600; color: var(--text); }
 
+code {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.88em;
+  padding: 0.08em 0.34em;
+  background: var(--hairline);
+  border-radius: 3px;
+  color: var(--text);
+}
+
 /* Inline highlight: subtle accent-tinted wash behind a phrase, like a
    highlighter pen in the site's warm palette. Works inside body text. */
 .highlight {
@@ -559,6 +568,15 @@ figcaption {
 #attention .tab-panel figure {
   max-width: 720px;
   margin: 0 auto 1rem;
+}
+
+/* Attention-viz captions are multi-sentence paragraphs; justify them
+ * so long lines read as body text, not centered figure labels. */
+#attention figcaption {
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 
 /* VIDEO GRIDS: .three-col is the standard 3 policy comparison row. */
@@ -1003,6 +1021,18 @@ a.author-card:hover .author-photo {
   overflow-x: auto;
 }
 
+/* Reset the inline code pill styling when <code> sits inside a <pre>
+ * block (e.g. the BibTeX box) — the pre supplies its own colors, font,
+ * and padding, so the inline rule would otherwise override the dark bg. */
+.bibtex-wrapper pre code {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  border-radius: 0;
+}
+
 .copy-btn {
   position: absolute;
   top: 12px;
@@ -1325,6 +1355,43 @@ a.author-card:hover .author-photo {
 
 .faq-answer p { margin-bottom: 0.75rem; }
 .faq-answer p:last-child { margin-bottom: 0; }
+
+.faq-video {
+  margin: 0;
+  flex: 1 1 0;
+  min-width: 0;
+}
+.faq-video video {
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+}
+.faq-video figcaption {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Two episode clips side by side, stacking on narrow viewports. */
+.faq-video-pair {
+  display: flex;
+  gap: 16px;
+  margin: 1rem 0 0.5rem;
+}
+@media (max-width: 640px) {
+  .faq-video-pair { flex-direction: column; }
+}
+
+.faq-video-note {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.4rem;
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
 
 @keyframes faq-fade {
   from { opacity: 0; transform: translateY(-4px); }

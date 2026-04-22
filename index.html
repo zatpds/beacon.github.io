@@ -49,7 +49,7 @@
   <div class="link-buttons">
 
     <!-- Paper: update href to the newest PDF under paper/ on each iteration -->
-    <a href="paper/Gated_Memory_Policy_2026-04-21.pdf" target="_blank" rel="noopener" class="btn-link">
+    <a href="paper/Gated_Memory_Policy_2026-04-22.pdf" target="_blank" rel="noopener" class="btn-link">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
            stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -920,7 +920,7 @@
     <figure class="benchmark-chart">
       <img src="assets/charts/mikasa_benchmark.svg" alt="Mikasa-Robo benchmark success rates across 5 memory-dependent tasks">
     </figure>
-    <p class="benchmark-caption"><strong>Evaluation results on MIKASA-Robo.</strong> We evaluate 5 tasks on the MIKASA-Robo benchmark, outperforming prior work MemoryVLA by 26.6% on average. The baseline performance statistics are reported in MIKASA-Robo and MemoryVLA.</p>
+    <p class="benchmark-caption">We evaluate 5 tasks on the MIKASA-Robo benchmark, outperforming prior work MemoryVLA by 26.6% on average. The baseline performance statistics are reported in MIKASA-Robo and MemoryVLA.</p>
   </div>
 </section>
 
@@ -934,44 +934,45 @@
   <div class="faq-list">
 
     <details class="faq-item">
-      <summary>How does GMP decide when to use memory?</summary>
+      <summary>When is the memory gate helpful, and when should I train it?</summary>
       <div class="faq-answer">
-        <p>[Your answer here. Explain the gating signal — what triggers μ<sub>t</sub>=1 vs μ<sub>t</sub>=0, and how the calibration phase produces these labels from a held-out validation set.]</p>
+        <p>The memory gate helps when the policy significantly overfits to history observations. This typically happens in tasks that require high precision manipulation and where there is not enough data to cover the expanded input space that memory introduces. A concrete example is <em>Tool Hang</em> in RoboMimic. The gate also helps when reactiveness matters: it reduces runtime and makes the model more efficient. That said, for most of the memory intensive tasks in our benchmark, adding the gate does not significantly improve performance. A practical approach is to first train the model without a gate (a simplified version of GMP), run evaluation, and then add gates when the model fails due to the issues above.</p>
       </div>
     </details>
 
     <details class="faq-item">
-      <summary>Why does extending observation history hurt performance?</summary>
+      <summary>What is the inference overhead of GMP vs. a no-memory policy?</summary>
       <div class="faq-answer">
-        <p>[Your answer here. Discuss distribution shift, overfitting to spurious correlations in long histories, and why GMP's gated approach avoids these failure modes.]</p>
+        <p>We only include a single aggregated token from a ViT per image (e.g., the class token in CLIP or the MAP token in SigLIP), and all history tokens are cached. The cross attention module also scales linearly in history length. As a result, the total inference time is similar to that of a policy without memory. We release an in the wild checkpoint so anyone can try it in the real world.</p>
       </div>
     </details>
 
     <details class="faq-item">
-      <summary>What is the inference-time overhead of GMP vs. a no-history policy?</summary>
+      <summary>What should I do if I have trouble reproducing the results?</summary>
       <div class="faq-answer">
-        <p>[Your answer here. Mention the cached history tokens, the binary gate's near-zero cost when off, and any wall-clock numbers you want to share.]</p>
+        <p>Please read through the <code>README.md</code> in each folder of the codebase carefully. The experiment details in the paper's appendix will also be helpful. If your problem is still not solved, feel free to submit a GitHub issue with a detailed description.</p>
       </div>
     </details>
 
     <details class="faq-item">
-      <summary>Can GMP be applied to existing visuomotor policies (e.g., Diffusion Policy)?</summary>
+      <summary>How long can our model memorize?</summary>
       <div class="faq-answer">
-        <p>[Your answer here. Describe what's needed to retrofit the gated cross-attention module onto an existing policy, and what training changes would be required.]</p>
-      </div>
-    </details>
-
-    <details class="faq-item">
-      <summary>How was the MemMimic benchmark constructed and how can others use it?</summary>
-      <div class="faq-answer">
-        <p>[Your answer here. Outline the task selection criteria, dataset format, evaluation protocol, and how researchers can run their own methods on the benchmark.]</p>
-      </div>
-    </details>
-
-    <details class="faq-item">
-      <summary>Will the code, datasets, and pretrained weights be released?</summary>
-      <div class="faq-answer">
-        <p>[Your answer here. Confirm the release plan, license, and where to find each artifact.]</p>
+        <p>Due to the strong scalability of cross attention, the history length is only bottlenecked by training GPU memory. By caching visual features and freezing a pretrained image encoder, our model is able to attend to 6,000 image frames (with paired actions), achieving memory recall of up to 10 minutes at 10 fps. Please refer to <strong>Finding 7</strong> for more details.</p>
+        <div class="faq-video-pair">
+          <figure class="faq-video">
+            <video autoplay controls muted playsinline loop preload="metadata">
+              <source src="assets/videos/faq/long_memory_ep7.mp4" type="video/mp4">
+            </video>
+            <figcaption>Episode 7 · ~8 min</figcaption>
+          </figure>
+          <figure class="faq-video">
+            <video autoplay controls muted playsinline loop preload="metadata">
+              <source src="assets/videos/faq/long_memory_ep69.mp4" type="video/mp4">
+            </video>
+            <figcaption>Episode 69 · ~10 min</figcaption>
+          </figure>
+        </div>
+        <p class="faq-video-note">The robot may appear frozen for long stretches, which is expected: we are stress testing the policy's memory duration. At the end, once the bin colors shuffle, the robot places the cube back in its original bin. Both clips play at real time speed (10 fps); drag the progress bar to skim through the full episode.</p>
       </div>
     </details>
 

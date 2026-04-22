@@ -65,10 +65,15 @@ DATA = [
 ]
 
 # ── Global font settings (matches plot_success_rate.py) ───────────────────────
+# svg.fonttype="none" emits real <text> elements so the browser renders
+# the chart with its own font at the correct weight. Must match
+# plot_success_rate.py or the two benchmark charts render at visibly
+# different stroke weights side by side (path vs native text).
 plt.rcParams.update({
     "font.family":        "sans-serif",
     "font.sans-serif":    ["Helvetica Neue", "Arial", "DejaVu Sans"],
     "axes.unicode_minus": False,
+    "svg.fonttype":       "none",
 })
 
 # ── Layout ────────────────────────────────────────────────────────────────────
