@@ -122,9 +122,11 @@ h2::after {
   border-radius: 1px;
 }
 
+/* Unified subsection heading: one size across task subsections, method
+ * rows, and benchmark blocks so peer-level titles read at the same weight. */
 h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.4rem;
+  font-weight: 650;
   letter-spacing: -0.018em;
   margin-bottom: 0.75rem;
 }
@@ -182,6 +184,10 @@ strong { font-weight: 600; color: var(--text); }
   font-size: 1.125rem;
   max-width: 760px;
   line-height: 1.72;
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 
 /* Section lede paragraph (first .body-text directly under a section) */
@@ -515,6 +521,15 @@ figure video {
   display: block;
 }
 
+/* Uniform cell box across comparison grids: source clips vary in native
+ * aspect (casting/flinging 4:3, pushing 16:9), which would otherwise make
+ * the box shrink/grow per subsection. Lock every cell to 16:9 and cover
+ * the frame so all three cross-trial and in-trial grids share one size. */
+.video-grid figure video {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
 figcaption {
   font-size: 0.86rem;
   font-style: normal;
@@ -655,9 +670,6 @@ figcaption {
 
 .subsection h3 {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 1.6rem;
-  font-weight: 650;
-  letter-spacing: -0.022em;
   margin-bottom: 0.5rem;
 }
 
@@ -665,8 +677,12 @@ figcaption {
   color: var(--text-soft);
   font-size: 0.95rem;
   margin-bottom: 1rem;
-  max-width: 680px;
+  max-width: 760px;
   line-height: 1.65;
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 
 /* TAB BAR (editorial underline).
@@ -1097,14 +1113,13 @@ a.author-card:hover .author-photo {
   #acknowledgments { padding-top: 0; padding-bottom: 64px; }
 }
 
-/* Acknowledgments: constrain to a reading column so the prose doesn't
- * sprawl the full container width like a section intro does. */
-#acknowledgments {
-  max-width: 860px;
-  margin: 0 auto;
-}
+/* Acknowledgments: prose spans the full section column so the block
+ * balances with the Team grid above it. Smaller type since the reading
+ * measure is wider than the site's standard 760px lede column. */
 #acknowledgments .body-text {
   max-width: none;
+  font-size: 0.95rem;
+  line-height: 1.68;
   margin-bottom: 1rem;
 }
 #acknowledgments .body-text:last-child { margin-bottom: 0; }
@@ -1170,9 +1185,6 @@ a.author-card:hover .author-photo {
 }
 
 .method-caption h3 {
-  font-size: 1.2rem;
-  font-weight: 650;
-  letter-spacing: -0.018em;
   color: var(--text);
   margin: 0 0 0.6rem;
   padding-bottom: 0.55rem;
@@ -1215,13 +1227,8 @@ a.author-card:hover .author-photo {
 }
 
 .benchmark-block h3 {
-  font-size: 1.2rem;
-  font-weight: 650;
-  letter-spacing: -0.018em;
   color: var(--text);
   margin: 0 0 1rem;
-  padding-bottom: 0.55rem;
-  border-bottom: 1px solid var(--border);
 }
 
 .benchmark-chart {
@@ -1309,6 +1316,10 @@ a.author-card:hover .author-photo {
   color: var(--text-soft);
   font-size: 0.95rem;
   line-height: 1.68;
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  -webkit-hyphens: auto;
   animation: faq-fade 0.32s var(--ease-out);
 }
 

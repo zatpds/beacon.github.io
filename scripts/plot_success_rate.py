@@ -89,10 +89,14 @@ TASKS = {
 }
 
 # ── Global font settings ──────────────────────────────────────────────────────
+# svg.fonttype="none" emits real <text> elements; the browser then renders
+# with its own font and correct space metrics. The default ("path") would
+# outline every glyph and collapse space widths.
 plt.rcParams.update({
     "font.family":        "sans-serif",
     "font.sans-serif":    ["Helvetica Neue", "Arial", "DejaVu Sans"],
     "axes.unicode_minus": False,
+    "svg.fonttype":       "none",
 })
 
 # ── Plotting ──────────────────────────────────────────────────────────────────
@@ -105,8 +109,10 @@ def plot_task(out_path: str, entries: list) -> None:
     use_err = any(e > 0 for e in errors)
 
     n      = len(entries)
-    fig_w  = 6.0   # fixed 9:5 landscape ratio for all charts
-    fig_h  = 3.5
+    fig_w  = 6.0
+    # Taller canvas so the rotated y-label "Success Rate (%)" fits inside
+    # the chart height at the larger font size without getting clipped.
+    fig_h  = 4.2
 
     fig, ax = plt.subplots(figsize=(fig_w, fig_h))
     fig.set_facecolor(BG)
@@ -126,18 +132,52 @@ def plot_task(out_path: str, entries: list) -> None:
         linewidth=0,
     )
 
+    # Horizontal title at top reads cleanly at any font size without the
+    # viewBox-clipping issues a rotated y-label hits on narrow (~240px)
+    # chart displays.
+    ax.set_title("Success Rate (%)", fontsize=19, color=TEXT_MUTED,
+                 pad=10, loc="left")
+
     ax.set_ylim(0, 118)
     ax.set_yticks([0, 50, 100])
-    ax.set_yticklabels(["0", "50", "100"], fontsize=14, color=TEXT_MUTED)
+    ax.set_yticklabels(["0", "50", "100"], fontsize=20, color=TEXT_MUTED)
+
+    # The chart displays at ~240px wide on the page. With 5-6 bars, any
+    # horizontal or shallow-rotated label collides with its neighbor at a
+    # readable font size. Use steeper rotation + smaller font for crowded
+    # charts; keep wide horizontal labels for 3-bar charts (plenty of room).
+    if n <= 3:
+        rotation, xlabel_fs = 0, 22
+    elif n == 4:
+        rotation, xlabel_fs = 25, 20
+    else:
+        rotation, xlabel_fs = 38, 17
+    rotate = rotation > 0
+    # When rotated, a 2-line "Ours\n(GMP)" reads awkwardly and its wider
+    # "(GMP)" tail runs into the previous label. Drop the parenthetical and
+    # keep just "Ours" — the accent color already signals it's ours.
+    xlabels = [
+        ("Ours" if (rotate and "Ours" in lbl) else lbl.replace("\n", " " if rotate else "\n"))
+        for lbl in labels
+    ]
 
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, fontsize=14.5, color=TEXT, linespacing=1.3)
+    ax.set_xticklabels(
+        xlabels,
+        fontsize=xlabel_fs,
+        color=TEXT,
+        linespacing=1.2,
+        rotation=rotation,
+        ha="right" if rotate else "center",
+        rotation_mode="anchor" if rotate else "default",
+    )
     for tick, ours in zip(ax.get_xticklabels(), is_ours):
         if ours:
             tick.set_color(ACCENT)
             tick.set_fontweight("bold")
 
-    ax.set_ylabel("Success Rate (%)", fontsize=13, color=TEXT_MUTED, labelpad=5)
+    # ylabel omitted: title above communicates the same thing and doesn't
+    # suffer the narrow-chart vertical clipping problem.
 
     # ── Grid, spines, ticks ───────────────────────────────────────────────────
     ax.yaxis.grid(True, color=BORDER, linewidth=0.45, zorder=0)
@@ -157,14 +197,22 @@ def plot_task(out_path: str, entries: list) -> None:
             bar.get_height() + err_pad + 1.5,
             label_val,
             ha="center", va="bottom",
-            fontsize=14,
+            fontsize=20,
             color=ACCENT if ours else TEXT_MUTED,
             fontweight="bold" if ours else "normal",
         )
 
-    plt.tight_layout(pad=0.3)
+    # Explicit margins give any rotated x-labels guaranteed room. The
+    # bbox_inches="tight" below then trims outer whitespace while keeping
+    # the title, ticks, and rotated labels visible.
+    fig.subplots_adjust(
+        left=0.14,
+        right=0.96,
+        top=0.88,
+        bottom=(0.38 if rotation >= 35 else 0.30) if rotate else 0.18,
+    )
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
-    fig.savefig(out_path, format="svg", bbox_inches="tight",
+    fig.savefig(out_path, format="svg", bbox_inches="tight", pad_inches=0.25,
                 facecolor=BG, transparent=False)
     plt.close(fig)
     print(f"  Saved → {out_path}")
@@ -223,19 +271,19 @@ def plot_mikasa(out_path: str) -> None:
                 bar.get_height() + 1.4,
                 str(val),
                 ha="center", va="bottom",
-                fontsize=8.5,
+                fontsize=12,
                 color=ACCENT if is_ours else TEXT_MUTED,
                 fontweight="bold" if is_ours else "normal",
             )
 
-    ax.set_ylim(0, 112)
+    ax.set_ylim(0, 118)
     ax.set_yticks([0, 25, 50, 75, 100])
-    ax.set_yticklabels(["0", "25", "50", "75", "100"], fontsize=11, color=TEXT_MUTED)
+    ax.set_yticklabels(["0", "25", "50", "75", "100"], fontsize=15, color=TEXT_MUTED)
 
     ax.set_xticks(task_positions)
-    ax.set_xticklabels(MIKASA_TASKS, fontsize=11.5, color=TEXT)
+    ax.set_xticklabels(MIKASA_TASKS, fontsize=16, color=TEXT)
 
-    ax.set_ylabel("Success Rate (%)", fontsize=11, color=TEXT_MUTED, labelpad=6)
+    ax.set_ylabel("Success Rate (%)", fontsize=15, color=TEXT_MUTED, labelpad=6)
 
     ax.yaxis.grid(True, color=BORDER, linewidth=0.45, zorder=0)
     ax.set_axisbelow(True)
@@ -247,10 +295,10 @@ def plot_mikasa(out_path: str) -> None:
 
     ax.legend(
         loc="upper center",
-        bbox_to_anchor=(0.5, -0.28),
+        bbox_to_anchor=(0.5, -0.32),
         ncol=6,
         frameon=False,
-        fontsize=10,
+        fontsize=14,
         labelcolor=TEXT,
         handlelength=1.4,
         handleheight=1.1,
