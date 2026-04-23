@@ -1922,13 +1922,20 @@ a.author-card:hover .author-photo {
   height: 3px;
   background: var(--accent);
   opacity: 0;
-  transition: opacity 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+  transition: opacity 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+              width 260ms linear;
   pointer-events: none;
 }
 
 .vid-host:hover .vid-fill,
 .vid-controls.is-scrub .vid-fill {
   opacity: 1;
+}
+
+/* During an active scrub, snap the fill/knob to the pointer position so
+ * the drag feels instant — no width/left interpolation. */
+.vid-controls.is-scrub .vid-fill {
+  transition: opacity 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
 /* Knob is centered vertically on the hairline (bottom offset + transform
@@ -1946,13 +1953,18 @@ a.author-card:hover .author-photo {
               0 1px 3px rgba(0, 0, 0, 0.35);
   transform: translate(-50%, 50%) scale(0);
   transform-origin: center;
-  transition: transform 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+  transition: transform 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+              left 260ms linear;
   pointer-events: none;
 }
 
 .vid-host:hover .vid-knob,
 .vid-controls.is-scrub .vid-knob {
   transform: translate(-50%, 50%) scale(1);
+}
+
+.vid-controls.is-scrub .vid-knob {
+  transition: transform 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
 .vid-pill {
