@@ -25,7 +25,7 @@
   --shadow-sm: 0 2px 6px -1px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-md: 0 8px 24px -8px rgba(15, 23, 42, 0.16), 0 2px 6px -2px rgba(15, 23, 42, 0.06);
 
-  --max-w: 820px;
+  --max-w: 880px;
   --pad-x: 24px;
 }
 
@@ -91,13 +91,11 @@ section p {
 }
 
 .paper-title {
-  width: 120%;
   font-size: 34px;
   line-height: 1.2;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text);
-  max-width: 760px;
   margin: 0 auto 24px;
 }
 
@@ -214,7 +212,6 @@ section p {
 /* SUPPLEMENTARY VIDEO */
 .video-figure {
   margin: 0 auto;
-  /* max-width: 640px; */
 }
 
 .video-figure video {
